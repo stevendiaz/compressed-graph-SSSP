@@ -10,8 +10,10 @@ def parse_input():
         if line[0] == 'a':
             line.pop(0)
         u, v, weight = [int(x) for x in line]
-        matrix.set(u, v, weight)
+        matrix.set(u - 1, v, weight)
     matrix.debug_info()
+    print matrix.iterate()
+    matrix.print_dimacs()
 
 class CSRImpl:
     def __init__(self, numRows, numCols):
@@ -59,6 +61,12 @@ class CSRImpl:
                 result.append((row_value, col_value, real_value))
                 current_row_index += 1
         return result
+
+    def print_dimacs(self):
+        print 'p sp %d %d' % (self.numRows, len(self.value))
+        edges = self.iterate()
+        for edge in edges:
+            print 'a %d %d %d' % (edge[0] + 1, edge[1], edge[2])
 
     def debug_info(self):
         print 'value ', self.value
