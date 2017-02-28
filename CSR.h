@@ -119,4 +119,13 @@ class CSR {
             }
             return -1;
         }
+
+        void print_dimacs() {
+            vector< vector<int32_t> > vals = iterate(); 
+            size_t n = vals.size();
+            cout << "p sp " << num_rows << " " << value.size() << endl;
+            for(uint32_t i = 0; i < n; ++i) {
+                cout << "a " << vals.at(i).at(0) << " " << vals.at(i).at(1) << " " << vals.at(i).at(2) << endl;
+            }
+        }
 };

@@ -14,19 +14,7 @@ void test() {
     cout << "A[1][1] = " << graph.get(1, 1) << endl;
     cout << "A[2][2] = " << graph.get(2, 2) << endl;
     cout << "A[3][1] = " << graph.get(3, 1) << endl;
-    vector< vector<int32_t> > result = graph.iterate();
-    size_t n = result.size();
-    size_t m = result.at(0).size();
-    cout << "[";
-    for(size_t i = 0; i < n; ++i) {
-        cout << "(";
-        for(size_t j = 0; j < m; ++j) {
-            cout << result.at(i).at(j) << " ";
-        }
-        cout << "),";
-    }
-    cout << "]" << endl; 
-
+    graph.print_dimacs(); 
 }
 
 int main() {
