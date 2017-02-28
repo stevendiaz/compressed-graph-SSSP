@@ -15,5 +15,5 @@ status:
 	git remote -v
 	git status
 
-csr: CSR.h RunSP.c++
+csr: CSR.h CSR.c++ RunSP.c++
 	$(CXX) $(CXXFLAGS) CSR.c++ RunSP.c++ -o csr.o
