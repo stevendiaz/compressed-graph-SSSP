@@ -1,3 +1,4 @@
+INT_MAX = 2147483647
 
 def parse_input():
     line = raw_input().split()
@@ -11,19 +12,26 @@ def parse_input():
             line.pop(0)
         u, v, weight = [int(x) for x in line]
         matrix.set(u, v, weight)
-    print('A[1][0] = %d' % matrix.get(1, 0))
-    print('A[1][1] = %d' % matrix.get(1, 1))
-    print('A[2][2] = %d' % matrix.get(2, 2))
-    print('A[3][1] = %d' % matrix.get(3, 1))
+    #print('A[1][0] = %d' % matrix.get(1, 0))
+    #print('A[1][1] = %d' % matrix.get(1, 1))
+    #print('A[2][2] = %d' % matrix.get(2, 2))
+    #print('A[3][1] = %d' % matrix.get(3, 1))
     #matrix.debug_info()
     print matrix.iterate()
-    #matrix.print_dimacs()
+    matrix.print_dimacs()
+    matrix.print_node_labels()
+    print matrix.largest_out_degree()
+
+def delta_step(graph, delta):
+    pass
 
 class CSRImpl:
     def __init__(self, numRows, numCols):
         self.value = []
         self.IA = [0] * (numRows + 1)
         self.JA = []
+        self.node_labels = [INT_MAX] * numRows
+        self.node_labels[0] = 0
         self.numRows = numRows
         self.numCols = numCols
         print('rows: %d' % numRows)
@@ -37,20 +45,6 @@ class CSRImpl:
             #print('val[%d]: %d' % (i, self.value[i]))
         #offset = self.JA[entries_in_row] + y
         return 0
-        #return self.value[offset]
-        #previous_row_values_count = self.IA[x]
-        #current_row_valid_count = self.IA[x+1]
-        #for i in range(previous_row_values_count, current_row_valid_count):
-        #    if self.JA[i] == y:
-        #        print("GETval: %s " % self.value)
-        #        print("GETIA: %s " % self.IA)
-        #        print("GETJA: %s " % self.JA)
-        #        return self.value[i]
-        #    else:
-        #        print("GETval: %s " % self.value)
-        #        print("GETIA: %s " % self.IA)
-        #        print("GETJA: %s " % self.JA)
-        #        return 0.0
     def set(self, x, y, v):
         for i in range(x+1, self.numRows+1):
             print('IA size line27: %d' % len(self.IA))
@@ -97,6 +91,26 @@ class CSRImpl:
         edges = self.iterate()
         for edge in edges:
             print 'a %d %d %d' % (edge[0], edge[1], edge[2])
+
+    def print_node_labels(self):
+        for i,v in enumerate(self.node_labels):
+            print('%d -> %d' % (i, v))
+
+    def largest_out_degree(self):
+        old_degree = -1
+        row = -1
+        for i in xrange(self.numRows):
+            curr_degree = self.IA[i + 1] - self.IA[i]
+            if curr_degree > old_degree:
+                row = i
+                old_degree = curr_degree
+        return row
+
+    def cost(u, v):
+        return self.get(u,v)
+
+    def tent(u):
+        return self.node_labels[u]
 
     def debug_info(self):
         print 'value ', self.value
