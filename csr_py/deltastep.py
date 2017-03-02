@@ -15,10 +15,8 @@ def parse_input():
             line.pop(0)
         u, v, weight = [int(x) for x in line]
         matrix.set(u, v, weight)
-
-    for i in range(1, 100):
-        delta_step(matrix, i)
-        print "\n"
+    matrix.debug_info()
+    delta_step(matrix, 1)
 
 def delta_step(graph, delta):
     global relax_count
@@ -103,6 +101,7 @@ class CSRImpl:
         self.value = []
         self.IA = [0] * (numRows + 1)
         self.JA = []
+        self.seen_nodes = {}
         self.node_labels = [0] * numRows
         self.numRows = numRows
         self.numCols = numCols
@@ -112,24 +111,32 @@ class CSRImpl:
             if self.JA[i] == y:
                 return self.value[i]
         return 0
+    
     def set(self, x, y, v):
-        for i in range(x+1, self.numRows+1):
-            self.IA[i] += 1
-        previous_row_values_count = self.IA[x]
-        inserted = False
-        for j in range(previous_row_values_count, self.IA[x+1]-1):
-            if self.JA[j] > y:
-                self.JA.insert(j, y)
-                self.value.insert(j, v)
-                inserted = True
-                break
-            elif self.JA[j] == y:
-                inserted = True
-                self.value[j] = v
-                break
-        if not inserted:
-            self.JA.insert(self.IA[x+1]-1,y)
-            self.value.insert(self.IA[x+1]-1, v)
+        if (x,y) not in self.seen_nodes:
+            print('%d %d' % (x, y))
+            for i in range(x+1, self.numRows+1):
+                self.IA[i] += 1
+            previous_row_values_count = self.IA[x]
+            inserted = False
+            for j in range(previous_row_values_count, self.IA[x+1] - 1):
+                # print("j: %d" % j)
+                # print("size: %d" % len(self.JA))
+                # print("IA[x+1]: %d" % (self.IA[x+1] - 1))
+                if self.JA[j] > y:
+                    self.JA.insert(j, y)
+                    self.value.insert(j, v)
+                    inserted = True
+                    break
+                elif self.JA[j] == y:
+                    inserted = True
+                    self.value[j] = v
+                    break
+            if not inserted:
+                self.JA.insert(self.IA[x+1]-1,y)
+                self.value.insert(self.IA[x+1]-1, v)  
+            self.seen_nodes[(x,y)] = v  
+
 
     def iterate(self):
         result = [] # a list of triple (row, col, value)
