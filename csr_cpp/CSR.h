@@ -1,31 +1,38 @@
-#include <stdint.h>
-// #include <stdlib.h>
+#include <cstdint>
+#include <cstdlib>
 #include <iostream>
 #include <vector>
+#include <unordered_map>
+#include <pair>
+
+#ifndef CSR_h
+#define CSR_h
 
 using namespace std;
 
 class CSR {
 private:
+    int32_t numRows;
+    int32_t numCols;
     vector<int32_t> value;
     vector<int32_t> IA;
     vector<int32_t> JA;
-    int32_t numRows;
-    int32_t numCols;
+    unordered_map<pair<int32_t, int32_t>, int32_t> seenNodes;
+    vector<int32_t> nodeLabels;
+
+
+    void updateValue(int32_t x, int32_t y, int32_t val);
 
 public:
-    CSR (int32_t size);
+    CSR (int32_t numRows, int32_t numCols);
 
-    vector<vector<int32_t>> iterate();
-    void put(int32_t x, int32_t y, int32_t v);
     int32_t get(int32_t x, int32_t y);
+    void set(int32_t x, int32_t y, int32_t val);
+    vector<vector<int32_t>> iterate();
+    void printNodeLabels();
+    int32_t getLargestOutDegree();
 
-    void print_dimacs() {
-        vector< vector<int32_t> > vals = iterate();
-        size_t n = vals.size();
-        cout << "p sp " << num_rows << " " << value.size() << endl;
-        for(uint32_t i = 0; i < n; ++i) {
-            cout << "a " << vals.at(i).at(0) << " " << vals.at(i).at(1) << " " << vals.at(i).at(2) << endl;
-        }
-    }
+    friend ostream &operator<<(ostream &w, CSR const &data);
 };
+
+#endif

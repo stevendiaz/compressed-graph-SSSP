@@ -105,19 +105,20 @@ class CSRImpl:
         self.node_labels = [0] * numRows
         self.numRows = numRows
         self.numCols = numCols
+
     def get(self, x, y):
         entries_in_row = self.IA[x + 1] - self.IA[x]
         for i in xrange(self.IA[x], self.IA[x+1]):
             if self.JA[i] == y:
                 return self.value[i]
         return 0
-    
+
     def set(self, x, y, v):
         if (x,y) not in self.seen_nodes:
             print('%d %d' % (x, y))
             for i in range(x+1, self.numRows+1):
                 self.IA[i] += 1
-            self.update_value(x, y, v)  
+            self.update_value(x, y, v)
         else:
             if v > self.get(x, y):
                 self.update_value(x, y, v)
@@ -138,7 +139,7 @@ class CSRImpl:
         if not inserted:
             self.JA.insert(self.IA[x+1]-1,y)
             self.value.insert(self.IA[x+1]-1, v)
-        self.seen_nodes[(x,y)] = v  
+        self.seen_nodes[(x,y)] = v
 
 
     def iterate(self):
