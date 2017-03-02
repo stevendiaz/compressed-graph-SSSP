@@ -117,25 +117,28 @@ class CSRImpl:
             print('%d %d' % (x, y))
             for i in range(x+1, self.numRows+1):
                 self.IA[i] += 1
-            previous_row_values_count = self.IA[x]
-            inserted = False
-            for j in range(previous_row_values_count, self.IA[x+1] - 1):
-                # print("j: %d" % j)
-                # print("size: %d" % len(self.JA))
-                # print("IA[x+1]: %d" % (self.IA[x+1] - 1))
-                if self.JA[j] > y:
-                    self.JA.insert(j, y)
-                    self.value.insert(j, v)
-                    inserted = True
-                    break
-                elif self.JA[j] == y:
-                    inserted = True
-                    self.value[j] = v
-                    break
-            if not inserted:
-                self.JA.insert(self.IA[x+1]-1,y)
-                self.value.insert(self.IA[x+1]-1, v)  
-            self.seen_nodes[(x,y)] = v  
+            self.update_value(x, y, v)  
+        else:
+            if v > self.get(x, y):
+                self.update_value(x, y, v)
+
+    def update_value(self, x, y, v):
+        previous_row_values_count = self.IA[x]
+        inserted = False
+        for j in range(previous_row_values_count, self.IA[x+1] - 1):
+            if self.JA[j] > y:
+                self.JA.insert(j, y)
+                self.value.insert(j, v)
+                inserted = True
+                break
+            elif self.JA[j] == y:
+                inserted = True
+                self.value[j] = v
+                break
+        if not inserted:
+            self.JA.insert(self.IA[x+1]-1,y)
+            self.value.insert(self.IA[x+1]-1, v)
+        self.seen_nodes[(x,y)] = v  
 
 
     def iterate(self):
