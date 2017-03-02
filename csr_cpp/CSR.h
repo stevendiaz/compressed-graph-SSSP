@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include <pair>
+#include <utility>
 
 #ifndef CSR_h
 #define CSR_h
@@ -31,6 +31,8 @@ public:
     vector<vector<int32_t>> iterate();
     void printNodeLabels();
     int32_t getLargestOutDegree();
+    int32_t getTent(int32_t u);
+    void setTent(int32_t u, int32_t val);
 
     friend ostream &operator<<(ostream &w, CSR const &data);
 };

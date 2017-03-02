@@ -1,22 +1,28 @@
+//
+// Created by Jia Li on 3/2/17.
+//
+
+#ifndef CSR_CPP_WORKLIST_H
+#define CSR_CPP_WORKLIST_H
+
+
 #include <cstdint>
-#include <cstdlib>
-#include <iostream>
-#include <vector>
-#include <unordered_map>
-#include <pair>
+#include <unordered_set>
+#include "CSR.h"
 
-#ifndef Worklist_h
-#define Worklist_h
-
-using namespace std;
-
-class Worklist{
+class Worklist {
 private:
-
-
+    int32_t delta;
+    unordered_map <int32_t, unordered_set<int32_t>> buckets;
 public:
-
+    Worklist(int32_t delta, CSR graph);
+    bool hasElements();
+    int32_t getIndex();
+    unordered_set<int32_t> get(int32_t i);
+    void set(int32_t i, unordered_set<int32_t> nodes);
+    void relaxNodes(CSR graph, unordered_set<int32_t> req);
 
 };
 
-#endif
+
+#endif //CSR_CPP_WORKLIST_H
