@@ -1,40 +1,34 @@
 #include "CSR.h"
 
-
-/* << overloading */
-ostream &operator<<(ostream &os, CSR const &data) {
-    vector <vector<int32_t>> vals = iterate();
-    size_t n = vals.size();
-    os << "p sp " << data.numRows << " " << data.value.size() << endl;
-    for (uint32_t i = 0; i < n; ++i) {
-        os << "a " << vals.at(i).at(0) << " " << vals.at(i).at(1) << " " << vals.at(i).at(2) << endl;
-    }
-
-    return os;
-}
-
 /* CSRImpl Class Methods */
-CSR::CSR(int32_t rows, int32_t cols) : numRows(rows), numCols(cols) {
+CSR::CSR(int32_t size) : size(size) {
     value = vector<int32_t>();
-    IA = vector<int32_t>(rows + 1, 0);
-    JA = vector<int32_t>(cols, 0);
-    seenNodes = unordered_map < pair < int32_t, int32_t >, int32_t > ();
-    nodeLabels = vector<int32_t>(rows, 0);
+    IA = vector<int32_t>(size + 1, 0);
+    JA = vector<int32_t>(size, 0);
+    seenNodes = map < pair < int32_t, int32_t >, int32_t > ();
+    nodeLabels = vector<int32_t>(size, 0);
 }
 
 void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
+//    cout << "CSR::updateValue" << endl;
     int32_t preVRowVal = IA[x];
-    bool inserted = 0;
+    bool inserted = false;
+    auto it = value.begin();
+
+//    cout << "for loop:" << endl;
+//    cout << "preVRowVal = " << preVRowVal << endl;
+//    cout << "IA[x + 1] - 1 = " << IA[x + 1] - 1 << endl;
     for (int j = preVRowVal; j < IA[x + 1] - 1; ++j) {
+//        cout << "j = " << j << endl;
         /* COME BACK FOR CLEANING UP!!! */
         if (JA[j] > y) {
             JA[j] = val;
-            value[j] = val;
-            inserted = 1;
+            value.insert(it + j, val);
+            inserted = true;
             break;
         } else if (JA[j] == y) {
-            inserted = 1;
-            value[j] = val;
+            inserted = true;
+            value.insert(it + j, val);
             break;
         }
     }
@@ -42,7 +36,7 @@ void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
     //Fall safe
     if (!inserted) {
         JA[IA[x + 1] - 1] = y;
-        value[IA[x + 1] - 1] = val;
+        value.insert(it + IA[x + 1] - 1, val);
     }
 
     //Mark (x, y) visited
@@ -51,7 +45,6 @@ void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
 }
 
 int32_t CSR::get(int32_t x, int32_t y) {
-    int32_t entry = IA[x + 1] - IA[x];
     for (int i = IA[x]; i < IA[x + 1]; ++i) {
         if (JA[i] == y) return value[i];
     }
@@ -59,19 +52,19 @@ int32_t CSR::get(int32_t x, int32_t y) {
 }
 
 void CSR::set(int32_t x, int32_t y, int32_t val) {
-    pair <int32_t, int32_t> coordinate(x, y);
-    auto it = seenNodes.find(coordinate);
-    if (it == seenNodes.end()) {
+//    cout << "CSR::set" << endl;
+    pos coordinate(x, y);
+    if (seenNodes.find(coordinate) == seenNodes.end()) {
         cout << x << " " << y << endl;
-        for (int i = x + 1; i < numRows; ++i)
+        for (int i = x + 1; i < size; ++i)
             ++IA[i];
         updateValue(x, y, val);
     } else if (val > get(x, y)) updateValue(x, y, val);
 }
 
 vector <vector<int32_t>> CSR::iterate() {
+//    cout << "CSR::iterate" << endl;
     vector <vector<int32_t>> result;
-    auto iaIt = IA.begin();
 
     for (int32_t i = 0; i < IA.size(); ++i) {
         if (i != 0) {
@@ -99,7 +92,7 @@ int32_t CSR::getLargestOutDegree() {
     int32_t oldDegree = -1;
     int32_t row = -1;
 
-    for (int i = 0; i < numRows; ++i) {
+    for (int i = 0; i < size; ++i) {
         int32_t currDegree = IA[i + 1] - IA[i];
         if (currDegree > oldDegree) {
             row = i;
@@ -116,3 +109,16 @@ int32_t CSR::getTent(int32_t u) {
 void CSR::setTent(int32_t u, int32_t val) {
     nodeLabels[u] = val;
 }
+
+
+///* << overloading */
+//ostream &operator<<(ostream &os, CSR const &data) {
+//    vector <vector<int32_t>> vals = data.iterate();
+//    size_t n = vals.size();
+//    os << "p sp " << data.size << " " << data.value.size() << endl;
+//    for (uint32_t i = 0; i < n; ++i) {
+//        os << "a " << vals.at(i).at(0) << " " << vals.at(i).at(1) << " " << vals.at(i).at(2) << endl;
+//    }
+//
+//    return os;
+//}

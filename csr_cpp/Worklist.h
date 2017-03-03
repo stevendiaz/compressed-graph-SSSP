@@ -13,7 +13,7 @@
 class Worklist {
 private:
     int32_t delta;
-    unordered_map <int32_t, unordered_set<int32_t>> buckets;
+    map<int32_t, unordered_set<int32_t>> buckets;
 public:
     Worklist(int32_t delta, CSR graph);
     bool hasElements();
