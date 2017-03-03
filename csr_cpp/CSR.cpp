@@ -5,7 +5,7 @@ CSR::CSR(int32_t size) : size(size) {
     value = vector<int32_t>();
     IA = vector<int32_t>(size + 1, 0);
     JA = vector<int32_t>(size, 0);
-    seenNodes = map < pair < int32_t, int32_t >, int32_t > ();
+    seenNodes = map < tuple, int32_t > ();
     nodeLabels = vector<int32_t>(size, 0);
 }
 
@@ -40,8 +40,8 @@ void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
     }
 
     //Mark (x, y) visited
-    pair <int32_t, int32_t> coordinate(x, y);
-    seenNodes[coordinate] = val;
+    tuple coordinate(x, y);
+    seenNodes.insert(coordinate, val);
 }
 
 int32_t CSR::get(int32_t x, int32_t y) {
@@ -52,8 +52,8 @@ int32_t CSR::get(int32_t x, int32_t y) {
 }
 
 void CSR::set(int32_t x, int32_t y, int32_t val) {
-//    cout << "CSR::set" << endl;
-    pos coordinate(x, y);
+    //cout << "CSR::set" << endl;
+    tuple coordinate(x, y);
     if (seenNodes.find(coordinate) == seenNodes.end()) {
         cout << x << " " << y << endl;
         for (int i = x + 1; i < size; ++i)
@@ -63,7 +63,7 @@ void CSR::set(int32_t x, int32_t y, int32_t val) {
 }
 
 vector <vector<int32_t>> CSR::iterate() {
-//    cout << "CSR::iterate" << endl;
+    //cout << "CSR::iterate" << endl;
     vector <vector<int32_t>> result;
 
     for (int32_t i = 0; i < IA.size(); ++i) {

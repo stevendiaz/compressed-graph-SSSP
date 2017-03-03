@@ -7,13 +7,14 @@
 
 
 #include <unordered_set>
+#include <climits>
 #include "CSR.h"
+
 
 class DeltaStep {
 protected:
     CSR* csr;
-    int32_t deltaStep;
-    int32_t relaxCount;
+    int32_t delta;
     unordered_set<vector<int32_t>> heavy;
     unordered_set<vector<int32_t>> light;
 
@@ -21,18 +22,19 @@ public:
     DeltaStep();
     DeltaStep(CSR* csr, int32_t step);
     void run();
+    unordered_set<tuple> match(unordered_set<int32_t> bucket, bool matchLight);
 };
 
 class Dijkstra : DeltaStep {
 public:
     Dijkstra(CSR* csr);
+    void run();
 };
 
 class ChaoticRelaxation : DeltaStep {
-private:
-
 public:
     ChaoticRelaxation(CSR* csr);
+    void run();
 };
 
 
