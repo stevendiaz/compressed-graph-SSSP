@@ -14,12 +14,12 @@ void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
     int32_t preVRowVal = IA[x];
     bool inserted = false;
     auto jit = JA.begin();
-    auto it = value.begin();
+    auto vit = value.begin();
 
     for (int j = preVRowVal; j < IA[x + 1] - 1; ++j) {
         if (JA.at(j) > y) {
-            JA.insert(jit + j, val);
-            value.insert(it + j, val);
+            JA.insert(jit + j, y);
+            value.insert(vit + j, val);
             inserted = true;
             break;
         } else if (JA.at(j) == y) {
@@ -29,11 +29,10 @@ void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
         }
     }
 
-
     //Fall safe
     if (!inserted) {
         JA.insert(jit + IA[x + 1] - 1, y);
-        value.insert(it + IA[x + 1] - 1, val);
+        value.insert(vit + IA[x + 1] - 1, val);
     }
 
     //Mark (x, y) visited
