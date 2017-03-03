@@ -28,7 +28,7 @@ public:
     CSR (int32_t size);
 
     int32_t get(int32_t x, int32_t y);
-    void set(int32_t x, int32_t y, int32_t val);
+    void put(int32_t x, int32_t y, int32_t val);
     vector<vector<int32_t>> iterate();
     void printNodeLabels();
     int32_t getLargestOutDegree();

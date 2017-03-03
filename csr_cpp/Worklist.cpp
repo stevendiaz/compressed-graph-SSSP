@@ -5,7 +5,7 @@
 #include "Worklist.h"
 
 Worklist::Worklist(CSR* graph, int32_t delta) : csr(graph), delta(delta), relaxCount(0) {
-    buckets = map<int32_t, unordered_set<int32_t>>();
+    buckets = map<int32_t, set<int32_t>>();
     vector<vector<int32_t>> vals = graph->iterate();
     int32_t w = 0;
 
@@ -13,7 +13,7 @@ Worklist::Worklist(CSR* graph, int32_t delta) : csr(graph), delta(delta), relaxC
          w = it->at(0);
         int32_t i = floor(graph->getTent(w/delta));
 
-        if(buckets.find(i) == buckets.end()) buckets[i] = unordered_set<int32_t>();
+        if(buckets.find(i) == buckets.end()) buckets[i] = set<int32_t>();
         buckets[i].insert(w);
     }
 }
@@ -32,11 +32,11 @@ int32_t Worklist::getIndex() {
     return -1;
 }
 
-unordered_set<int32_t> Worklist::get(int32_t i) {
+set<int32_t> Worklist::get(int32_t i) {
     return buckets[i];
 }
 
-void Worklist::set(int32_t i, unordered_set<int32_t> nodes) {
+void Worklist::put(int32_t i, set<int32_t> nodes) {
     buckets[i] = nodes;
 }
 
@@ -49,12 +49,12 @@ void Worklist::relax(int32_t w, int32_t d) {
         if(buckets[i].find(w) != buckets[i].end()) buckets[i].erase(w);
         int32_t newInd = floor(d/delta);
         if(buckets.find(newInd) == buckets.end())
-            buckets[newInd] = unordered_set<int32_t>({w});
+            buckets[newInd] = set<int32_t>({w});
         else buckets[newInd].insert(w);
     }
 }
 
-void Worklist::relaxNodes(unordered_set<csrTuple> req) {
+void Worklist::relaxNodes(set<csrTuple> req) {
     vector<csrTuple> reqVector(req.begin(), req.end());
     random_shuffle(reqVector.begin(), reqVector.end());
 

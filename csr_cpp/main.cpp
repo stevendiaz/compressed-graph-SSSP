@@ -3,13 +3,14 @@
 //
 
 #include <cstring>
+#include <string>
 #include "Worklist.h"
 #include "CSR.h"
 #include "SSSP.h"
 
 const int MAX_CHARS_PER_LINE = 512;
 
-// Credit:
+// // Credit:
 // http://ysonggit.github.io/coding/2014/12/16/split-a-string-using-c.html
 vector<string> split(const string &s, char delim) {
     vector<string> v;
@@ -46,7 +47,7 @@ CSR* parseInput(){
         cin.getline(buffer, MAX_CHARS_PER_LINE);
         line = split(buffer, ' ');
         if(line[0] == "a") {
-            csr->set(stoi32(line[1]), stoi32(line[2]), stoi32(line[3]));
+            csr->put(stoi32(line[1]), stoi32(line[2]), stoi32(line[3]));
         }
     }
     return csr;

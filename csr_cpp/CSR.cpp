@@ -41,7 +41,7 @@ void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
 
     //Mark (x, y) visited
     csrTuple coordinate(x, y);
-    seenNodes.[coordinate] = val;
+    seenNodes[coordinate] = val;
 }
 
 int32_t CSR::get(int32_t x, int32_t y) {
@@ -51,7 +51,7 @@ int32_t CSR::get(int32_t x, int32_t y) {
     return 0;
 }
 
-void CSR::set(int32_t x, int32_t y, int32_t val) {
+void CSR::put(int32_t x, int32_t y, int32_t val) {
     //cout << "CSR::set" << endl;
     csrTuple coordinate(x, y);
     if (seenNodes.find(coordinate) == seenNodes.end()) {
@@ -66,7 +66,7 @@ vector <vector<int32_t>> CSR::iterate() {
     //cout << "CSR::iterate" << endl;
     vector <vector<int32_t>> result;
 
-    for (int32_t i = 0; i < IA.size(); ++i) {
+    for (size_t i = 0; i < IA.size(); ++i) {
         if (i != 0) {
             int32_t currentRowIndex = 0;
             while (currentRowIndex < IA.at(i) - IA.at(i - 1)) {
@@ -84,7 +84,7 @@ vector <vector<int32_t>> CSR::iterate() {
 }
 
 void CSR::printNodeLabels() {
-    for (int i = 0; i < nodeLabels.size(); ++i)
+    for (size_t i = 0; i < nodeLabels.size(); ++i)
         cout << i << " " << nodeLabels[i];
 }
 
