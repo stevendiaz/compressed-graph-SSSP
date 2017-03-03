@@ -22,7 +22,7 @@ public:
     DeltaStep();
     DeltaStep(CSR* csr, int32_t step);
     void run();
-    unordered_set<tuple> match(unordered_set<int32_t> bucket, bool matchLight);
+    unordered_set<csrTuple> match(unordered_set<int32_t> bucket, bool matchLight);
 };
 
 class Dijkstra : DeltaStep {

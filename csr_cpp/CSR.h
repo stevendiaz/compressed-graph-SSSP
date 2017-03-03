@@ -8,7 +8,7 @@
 #ifndef CSR_h
 #define CSR_h
 
-typedef std::pair<int32_t, int32_t> tuple;
+typedef std::pair<int32_t, int32_t> csrTuple;
 
 using namespace std;
 
@@ -18,7 +18,7 @@ private:
     vector<int32_t> value;
     vector<int32_t> IA;
     vector<int32_t> JA;
-    map<tuple, int32_t> seenNodes;
+    map<csrTuple, int32_t> seenNodes;
     vector<int32_t> nodeLabels;
 
 

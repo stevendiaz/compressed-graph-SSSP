@@ -24,7 +24,7 @@ public:
     int32_t getIndex();
     unordered_set<int32_t> get(int32_t i);
     void set(int32_t i, unordered_set<int32_t> nodes);
-    void relaxNodes(unordered_set<tuple> req);
+    void relaxNodes(unordered_set<csrTuple> req);
     void printRelaxCount();
 
 };

@@ -54,8 +54,8 @@ void Worklist::relax(int32_t w, int32_t d) {
     }
 }
 
-void Worklist::relaxNodes(unordered_set<tuple> req) {
-    vector<tuple> reqVector(req.begin(), req.end());
+void Worklist::relaxNodes(unordered_set<csrTuple> req) {
+    vector<csrTuple> reqVector(req.begin(), req.end());
     random_shuffle(reqVector.begin(), reqVector.end());
 
     for (auto it = reqVector.begin(); it != reqVector.end(); ++it) {

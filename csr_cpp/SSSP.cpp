@@ -23,12 +23,12 @@ void DeltaStep::run() {
         unordered_set<vector<int32_t>> s;
         int32_t i = worklist.getIndex();
         while(!worklist.get(i).empty()){
-            unordered_set<tuple> req = match(worklist.get(i), true);
+            unordered_set<csrTuple> req = match(worklist.get(i), true);
             s.insert(worklist.get(i).begin(), worklist.get(i).end());
             worklist.set(i, unordered_set<int32_t>());
             worklist.relaxNodes(req);
         }
-        unordered_set<tuple> req = match(worklist.get(i), false);
+        unordered_set<csrTuple> req = match(worklist.get(i), false);
         worklist.relaxNodes(req);
     }
     csr->printNodeLabels();
@@ -36,8 +36,8 @@ void DeltaStep::run() {
 
 }
 
-unordered_set<tuple> DeltaStep::match(unordered_set<int32_t> bucket, bool matchLight) {
-    unordered_set<tuple> result;
+unordered_set<csrTuple> DeltaStep::match(unordered_set<int32_t> bucket, bool matchLight) {
+    unordered_set<csrTuple> result;
 
     unordered_set<vector<int32_t>>::iterator b;
     unordered_set<vector<int32_t>>::iterator e;
