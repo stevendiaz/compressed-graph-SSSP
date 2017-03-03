@@ -12,27 +12,27 @@
 
 class DeltaStep {
 protected:
-    CSR* csr;
+    CSR csr;
     int32_t delta;
     set<vector<int32_t>> heavy;
     set<vector<int32_t>> light;
 
 public:
     DeltaStep();
-    DeltaStep(CSR* csr, int32_t step);
+    DeltaStep(CSR csr, int32_t step);
     void run();
     set<csrTuple> match(set<int32_t> bucket, bool matchLight);
 };
 
 class Dijkstra : DeltaStep {
 public:
-    Dijkstra(CSR* csr);
+    Dijkstra(CSR csr);
     void run();
 };
 
 class ChaoticRelaxation : DeltaStep {
 public:
-    ChaoticRelaxation(CSR* csr);
+    ChaoticRelaxation(CSR csr);
     void run();
 };
 
