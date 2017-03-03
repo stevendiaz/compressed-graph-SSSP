@@ -1,5 +1,7 @@
 import math
+from random import shuffle
 INT_MAX = 2147483647
+relax_count = 0
 
 def parse_input():
     line = raw_input().split()
@@ -13,9 +15,12 @@ def parse_input():
             line.pop(0)
         u, v, weight = [int(x) for x in line]
         matrix.set(u, v, weight)
+    matrix.debug_info()
     delta_step(matrix, 1)
 
 def delta_step(graph, delta):
+    global relax_count
+    relax_count = 0
     heavy = set()
     light = set()
     for vertex in graph.iterate():
@@ -27,29 +32,31 @@ def delta_step(graph, delta):
         graph.set_tent(vertex[0], INT_MAX)
     graph.set_tent(0, 0)
 
-    buckets = make_buckets(graph, delta)
-    while has_elements(buckets):
+    buckets = WorkList(graph, delta)
+    while buckets.has_elements():
         S = set()
-        i = get_index(buckets)
-        while len(buckets[i]) > 0:
-            req = light_matches(graph, buckets[i], light)
-            S = S.union(buckets[i])
-            buckets[i] = set()
-            for e in req:
-                relax(graph, buckets, e[0], e[1], delta)
+        i = buckets.get_index()
+        while len(buckets.get(i)) > 0:
+            req = light_matches(graph, buckets.get(i), light)
+            S = S.union(buckets.get(i))
+            buckets.set(i, set())
+            buckets.relax_nodes(graph, req)
         req = heavy_matches(graph, S, heavy)
-        for e in req:
-            relax(graph, buckets, e[0], e[1], delta)
+        buckets.relax_nodes(graph, req)
     graph.print_node_labels()
+    print 'Relaxations: %d' % relax_count
 
 def relax(graph, buckets, w, d, delta):
+    global relax_count
+    relax_count += 1
     tent_cost = graph.get_tent(w)
     if d < tent_cost:
         graph.set_tent(w, d)
         i = math.floor(tent_cost/delta)
-        buckets[i].remove(w)
+        if w in buckets[i]:
+            buckets[i].remove(w)
         new_idx = math.floor(d/delta)
-        if new_idx not in buckets:
+        if new_idx not in buckets.keys():
             buckets[new_idx] = set([w])
         else:
             buckets[new_idx].add(w)
@@ -84,9 +91,6 @@ def light_matches(graph, bucket, light):
     return result
 
 def has_elements(buckets):
-    """
-    Return False if for all the entry in buckets, the set is empty
-    """
     for i in buckets.keys():
         if len(buckets[i]) != 0:
             return True
@@ -97,21 +101,32 @@ class CSRImpl:
         self.value = []
         self.IA = [0] * (numRows + 1)
         self.JA = []
+        self.seen_nodes = {}
         self.node_labels = [0] * numRows
         self.numRows = numRows
         self.numCols = numCols
+
     def get(self, x, y):
         entries_in_row = self.IA[x + 1] - self.IA[x]
         for i in xrange(self.IA[x], self.IA[x+1]):
             if self.JA[i] == y:
                 return self.value[i]
         return 0
+
     def set(self, x, y, v):
-        for i in range(x+1, self.numRows+1):
-            self.IA[i] += 1
+        if (x,y) not in self.seen_nodes:
+            print('%d %d' % (x, y))
+            for i in range(x+1, self.numRows+1):
+                self.IA[i] += 1
+            self.update_value(x, y, v)
+        else:
+            if v > self.get(x, y):
+                self.update_value(x, y, v)
+
+    def update_value(self, x, y, v):
         previous_row_values_count = self.IA[x]
         inserted = False
-        for j in range(previous_row_values_count, self.IA[x+1]-1):
+        for j in range(previous_row_values_count, self.IA[x+1] - 1):
             if self.JA[j] > y:
                 self.JA.insert(j, y)
                 self.value.insert(j, v)
@@ -124,6 +139,8 @@ class CSRImpl:
         if not inserted:
             self.JA.insert(self.IA[x+1]-1,y)
             self.value.insert(self.IA[x+1]-1, v)
+        self.seen_nodes[(x,y)] = v
+
 
     def iterate(self):
         result = [] # a list of triple (row, col, value)
@@ -172,6 +189,45 @@ class CSRImpl:
         print 'value ', self.value
         print 'IA ', self.IA
         print 'JA ', self.JA
+
+class WorkList:
+    def __init__(self, graph, delta):
+        self.buckets = {}
+        self.delta = delta
+        for v in graph.iterate():
+            i = math.floor(graph.get_tent(v[0])/delta)
+            if i not in self.buckets:
+                self.buckets[i] = set([v[0]])
+            else:
+                self.buckets[i].add(v[0])
+
+    def has_elements(self):
+        """
+        Return False if for all the entry in buckets, the set is empty
+        """
+        for i in self.buckets.keys():
+            if len(self.buckets[i]) != 0:
+                return True
+        return False
+
+    def get_index(self):
+        for key in self.buckets:
+            if len(self.buckets[key]) > 0:
+                return key
+        return -1
+
+    def get(self, i):
+        return self.buckets[i]
+
+    def set(self, i, nodes):
+        self.buckets[i] = nodes
+
+    def relax_nodes(self, graph, req):
+        req_list = list(req)
+        shuffle(req_list)
+        for e in req_list:
+            relax(graph, self.buckets, e[0], e[1], self.delta)
+
 
 if __name__ == '__main__':
     parse_input()
