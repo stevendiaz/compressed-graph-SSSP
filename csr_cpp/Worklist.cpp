@@ -12,12 +12,10 @@ Worklist::Worklist(CSR graph, int32_t delta) : csr(graph), delta(delta), relaxCo
     for(auto it = vals.begin(); it != vals.end(); ++it){
         w = it->at(0);
         int32_t i = floor(graph.getTent(w)/delta);
-        cout  << "i is " << i << endl;
+//        cout  << "i is " << i << endl;
 
-        if(buckets.find(i) == buckets.end()){
-            buckets[i] = set<int32_t>();
-            buckets[i].insert(w);
-        } else buckets[i].insert(w);
+        if(buckets.find(i) == buckets.end())buckets[i] = set<int32_t>();
+        buckets[i].insert(w);
     }
 }
 
@@ -29,8 +27,6 @@ bool Worklist::hasElements() {
 }
 
 int32_t Worklist::getIndex() {
-
-    cout << "Worklist::getIndex()" <<endl;
     for(auto it = buckets.begin(); it != buckets.end(); ++it)
         if(it->second.size() > 0) return it->first;
 
@@ -42,7 +38,6 @@ set<int32_t> Worklist::get(int32_t i) {
 }
 
 void Worklist::put(int32_t i, set<int32_t> nodes) {
-    cout << "WL::put" << endl;
     buckets[i] = nodes;
 }
 

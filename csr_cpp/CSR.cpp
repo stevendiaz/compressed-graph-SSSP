@@ -10,18 +10,13 @@ CSR::CSR(int32_t size) : size(size) {
 }
 
 void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
-   cout << "CSR::updateValue" << endl;
+//   cout << "CSR::updateValue" << endl;
     int32_t preVRowVal = IA[x];
     bool inserted = false;
     auto jit = JA.begin();
     auto it = value.begin();
 
-   // cout << "for loop:" << endl;
-   // cout << "preVRowVal = " << preVRowVal << endl;
-   // cout << "IA[x + 1] - 1 = " << IA[x + 1] - 1 << endl;
     for (int j = preVRowVal; j < IA[x + 1] - 1; ++j) {
-       cout << "j = " << j << endl;
-        /* COME BACK FOR CLEANING UP!!! */
         if (JA.at(j) > y) {
             JA.insert(jit + j, val);
             value.insert(it + j, val);
@@ -54,14 +49,12 @@ int32_t CSR::get(int32_t x, int32_t y) {
 }
 
 void CSR::put(int32_t x, int32_t y, int32_t val) {
-    cout << "CSR::put" << endl;
+//    cout << "CSR::put" << endl;
     csrTuple coordinate(x, y);
     if (seenNodes.find(coordinate) == seenNodes.end()) {
-        cout << x << " " << y << endl;
+        //cout << x << " " << y << endl;
         for (int i = x + 1; i <= size; ++i){
-
             ++IA[i];
-            // cout << "updated IA[" << i << "] = " << IA[i]<<endl;
         }
         updateValue(x, y, val);
     } else if (val > get(x, y)) updateValue(x, y, val);
@@ -71,34 +64,20 @@ vector <vector<int32_t>> CSR::iterate() {
     cout << "CSR::iterate" << endl;
     vector <vector<int32_t>> result;
 
-    // cout << "size of IA = " << IA.size() << endl;
-    // cout << "size of JA = " << JA.size() << endl;
-    // cout << "size of val" << value.size() << endl;
-    for (size_t i = 0; i < IA.size(); ++i) {
-        // cout << "i = " << i << endl;
-        if (i == 0) continue;
+    for (size_t i = 1; i < IA.size(); ++i) {
         int32_t currentRowIndex = 0;
-        // cout << "IA.at(" << i << ") = " << IA.at(i) <<endl;
-        // cout << "IA.at(" << i - 1 << ") = " << IA.at(i-1) <<endl;
 
         while (currentRowIndex < IA.at(i) - IA.at(i - 1)) {
-            // cout << "currentRowIndex = " << currentRowIndex << endl;
-            // cout << "in while loop" << endl;
             int32_t rowVal = i - 1;
-            // cout << "JA.at(" << i << ") = " << JA.at(IA.at(i - 1) + currentRowIndex) <<endl;
-            // cout << "val.at(" << i - 1 << ") = " <<value.at(IA.at(i - 1) + currentRowIndex) <<endl;
             int32_t colVal = JA.at(IA.at(i - 1) + currentRowIndex);
             int32_t realVal = value.at(IA.at(i - 1) + currentRowIndex);
 
             vector <int32_t> pairing{rowVal, colVal, realVal};
             result.push_back(pairing);
             ++currentRowIndex;
-            // cout << "after: currentRowIndex = " << currentRowIndex << endl;
-
-            cout << endl <<endl;
         }
-        // cout << "out of while" << endl;
     }
+    cout << "Leaving CSR::iterate" << endl;
     return result;
 }
 
@@ -129,15 +108,20 @@ void CSR::setTent(int32_t u, int32_t val) {
     nodeLabels[u] = val;
 }
 
+void CSR::debugInfo() {
+    cout << "value: ";
+    for(auto it = value.begin(); it != value.end(); ++it)
+        cout << *it << " ";
+    cout << endl;
 
-///* << overloading */
-//ostream &operator<<(ostream &os, CSR const &data) {
-//    vector <vector<int32_t>> vals = data.iterate();
-//    size_t n = vals.size();
-//    os << "p sp " << data.size << " " << data.value.size() << endl;
-//    for (uint32_t i = 0; i < n; ++i) {
-//        os << "a " << vals.at(i).at(0) << " " << vals.at(i).at(1) << " " << vals.at(i).at(2) << endl;
-//    }
-//
-//    return os;
-//}
+    cout << "IA:";
+    for(auto it = IA.begin(); it != IA.end(); ++it)
+        cout << *it << " ";
+    cout << endl;
+
+    cout << "JA:";
+    for(auto it = JA.begin(); it != JA.end(); ++it)
+        cout << *it << " ";
+    cout << endl;
+
+}

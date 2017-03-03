@@ -39,11 +39,10 @@ CSR parseInput(){
     int32_t size = stoi32(line[2]);
     int32_t edges = stoi32((line[3]));
 
-    cout << "size = " << size << ", edges = " << edges << endl;
+//    cout << "size = " << size << ", edges = " << edges << endl;
 
     //Construct CSR as we read the file
     CSR csr = CSR(size);
-    // cout << "sad face" <<endl;
     for(int i = 0; i < edges; ++i){
         cin.getline(buffer, MAX_CHARS_PER_LINE);
         line = split(buffer, ' ');
@@ -52,17 +51,15 @@ CSR parseInput(){
         }
     }
 
-    cout << "about to return" << endl;
+    csr.debugInfo();
     return csr;
 }
 
 
 int main(){
     CSR csr = parseInput();
-
-    cout << "hi about to call DEALSTEP" << endl;
     DeltaStep deltaStep = DeltaStep(csr, 1);
-    cout  << "construction successful" << endl;
+    cout << "Running Delta Step:" << endl;
     deltaStep.run();
 
     return 0;
