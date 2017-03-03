@@ -31,7 +31,7 @@ public:
     void put(int32_t x, int32_t y, int32_t val);
     vector<vector<int32_t>> iterate();
     void printNodeLabels();
-    int32_t getLargestOutDegree();
+    //int32_t getLargestOutDegree();
     int32_t getTent(int32_t u);
     void setTent(int32_t u, int32_t val);
     void debugInfo();

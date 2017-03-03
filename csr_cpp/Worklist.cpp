@@ -12,11 +12,27 @@ Worklist::Worklist(CSR graph, int32_t delta) : csr(graph), delta(delta), relaxCo
     for(auto it = vals.begin(); it != vals.end(); ++it){
         w = it->at(0);
         int32_t i = floor(graph.getTent(w)/delta);
-//        cout  << "i is " << i << endl;
+//        cout << "w = " << w << endl;
+//        cout << "i = " << i <<endl;
 
         if(buckets.find(i) == buckets.end())buckets[i] = set<int32_t>();
         buckets[i].insert(w);
     }
+
+    cout << "buckets: ";
+    cout << "{";
+    for(auto i = buckets.begin(); i != buckets.end(); ++i){
+        cout << i->first << ": " ;
+        cout << "(";
+        for(auto it = i->second.begin(); it != i->second.end(); ++it){
+            cout << *it << " ";
+        }
+        cout << ") ";
+    }
+    cout << "}" << endl;
+
+    light = set<vector<int32_t>>();
+    heavy = set<vector<int32_t>>();
 }
 
 bool Worklist::hasElements() {
@@ -28,7 +44,10 @@ bool Worklist::hasElements() {
 
 int32_t Worklist::getIndex() {
     for(auto it = buckets.begin(); it != buckets.end(); ++it)
-        if(it->second.size() > 0) return it->first;
+        if(it->second.size() > 0) {
+            cout << "key: " << it->first << endl;
+            return it->first;
+        }
 
     return -1;
 }
@@ -42,7 +61,6 @@ void Worklist::put(int32_t i, set<int32_t> nodes) {
 }
 
 void Worklist::relax(int32_t w, int32_t d) {
-    cout << "RELAX" << endl;
     ++relaxCount;
     int32_t tentCost = csr.getTent(w);
     if(d < tentCost){
@@ -57,7 +75,7 @@ void Worklist::relax(int32_t w, int32_t d) {
 }
 
 void Worklist::relaxNodes(set<csrTuple> req) {
-    cout << "Worklist::relaxNodes()" <<endl;
+//    cout << "Worklist::relaxNodes()" <<endl;
     vector<csrTuple> reqVector(req.begin(), req.end());
     random_shuffle(reqVector.begin(), reqVector.end());
 
@@ -69,3 +87,20 @@ void Worklist::relaxNodes(set<csrTuple> req) {
 void Worklist::printRelaxCount() {
     cout << "Relaxations: " << relaxCount << endl;
 }
+
+set<vector<int32_t>> Worklist::getLight() {
+    return light;
+}
+
+set<vector<int32_t>> Worklist::getHeavy() {
+    return heavy;
+}
+
+void Worklist::setLight(set<vector<int32_t>> s) {
+    light = s;
+}
+
+void Worklist::setHeavy(set<vector<int32_t>> s) {
+    heavy = s;
+}
+

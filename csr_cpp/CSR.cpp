@@ -52,7 +52,7 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
 //    cout << "CSR::put" << endl;
     csrTuple coordinate(x, y);
     if (seenNodes.find(coordinate) == seenNodes.end()) {
-        //cout << x << " " << y << endl;
+        cout << x << " " << y << endl;
         for (int i = x + 1; i <= size; ++i){
             ++IA[i];
         }
@@ -61,7 +61,7 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
 }
 
 vector <vector<int32_t>> CSR::iterate() {
-    cout << "CSR::iterate" << endl;
+//    cout << "CSR::iterate" << endl;
     vector <vector<int32_t>> result;
 
     for (size_t i = 1; i < IA.size(); ++i) {
@@ -77,27 +77,12 @@ vector <vector<int32_t>> CSR::iterate() {
             ++currentRowIndex;
         }
     }
-    cout << "Leaving CSR::iterate" << endl;
     return result;
 }
 
 void CSR::printNodeLabels() {
     for (size_t i = 0; i < nodeLabels.size(); ++i)
-        cout << i << " " << nodeLabels[i] << endl;
-}
-
-int32_t CSR::getLargestOutDegree() {
-    int32_t oldDegree = -1;
-    int32_t row = -1;
-
-    for (int i = 0; i < size; ++i) {
-        int32_t currDegree = IA[i + 1] - IA[i];
-        if (currDegree > oldDegree) {
-            row = i;
-            oldDegree = currDegree;
-        }
-    }
-    return row;
+        cout << i << " -> " << nodeLabels[i] << endl;
 }
 
 int32_t CSR::getTent(int32_t u) {
@@ -114,14 +99,27 @@ void CSR::debugInfo() {
         cout << *it << " ";
     cout << endl;
 
-    cout << "IA:";
+    cout << "IA: ";
     for(auto it = IA.begin(); it != IA.end(); ++it)
         cout << *it << " ";
     cout << endl;
 
-    cout << "JA:";
+    cout << "JA: ";
     for(auto it = JA.begin(); it != JA.end(); ++it)
         cout << *it << " ";
     cout << endl;
-
 }
+
+//int32_t CSR::getLargestOutDegree() {
+//    int32_t oldDegree = -1;
+//    int32_t row = -1;
+//
+//    for (int i = 0; i < size; ++i) {
+//        int32_t currDegree = IA[i + 1] - IA[i];
+//        if (currDegree > oldDegree) {
+//            row = i;
+//            oldDegree = currDegree;
+//        }
+//    }
+//    return row;
+//}

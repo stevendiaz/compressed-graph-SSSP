@@ -59,7 +59,7 @@ CSR parseInput(){
 int main(){
     CSR csr = parseInput();
     DeltaStep deltaStep = DeltaStep(csr, 1);
-    cout << "Running Delta Step:" << endl;
+    //cout << "Running Delta Step:" << endl;
     deltaStep.run();
 
     return 0;
