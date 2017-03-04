@@ -32,5 +32,14 @@ void printSetOfVectors(set<vector<T>> s) {
     cout << ")" <<endl;
 }
 
+template <typename T>
+void printSet(set<T> v){
+    cout << "[";
+    for(auto i = v.begin(); i != v.end(); ++i){
+        cout << *i << " ";
+    }
+    cout << "] ";
+}
+
 
 #endif //CSR_CPP_DEBUG_H
