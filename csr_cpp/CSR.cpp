@@ -51,7 +51,7 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
 //    cout << "CSR::put" << endl;
     csrTuple coordinate(x, y);
     if (seenNodes.find(coordinate) == seenNodes.end()) {
-        cout << x << " " << y << endl;
+//        cout << x << " " << y << endl;
         for (int i = x + 1; i <= size; ++i){
             ++IA[i];
         }

@@ -34,41 +34,41 @@ void DeltaStep::run() {
         long i = worklist.getIndex();
         while(!worklist.get(i).empty()){
             set<int32_t> bucket = worklist.get(i);
-            set<csrTuple> req = match(bucket, worklist.getLight());
+            set<csrTuple> req = worklist.match(bucket, worklist.getLight());
             s.insert(bucket.begin(), bucket.end());
             worklist.put(i, set<int32_t>());
             worklist.relaxNodes(req);
         }
-
-        set<csrTuple> req = match(s, worklist.getHeavy());
-
-//        cout << "Req: ";
-//        cout << "[";
-//        for(auto i = req.begin(); i != req.end(); ++i){
-//            cout << "(" << i->first << ", " << i->second << ")";
-//        }
-//        cout << "] " << endl;
+        set<csrTuple> req = worklist.match(s, worklist.getHeavy());
+        cout << "Req: ";
+        cout << "[";
+        for(auto i = req.begin(); i != req.end(); ++i){
+            cout << "(" << i->first << ", " << i->second << ")";
+        }
+        cout << "] " << endl;
         worklist.relaxNodes(req);
+        worklist.csr.printNodeLabels();
+        cout << endl;
     }
-    csr.printNodeLabels();
+    worklist.csr.printNodeLabels();
     worklist.printRelaxCount();
 
 }
 
 set<csrTuple> DeltaStep::match(set<int32_t> bucket, set<vector<int32_t>> s) {
-    cout << "DeltaStep::match" << endl;
+//    cout << "DeltaStep::match" << endl;
     set<csrTuple> result;
 
-    cout << "bucket: ";
-    printSet(bucket);
+//    cout << "bucket: ";
+//    printSet(bucket);
 
-    cout << "match set: ";
-    printSetOfVectors(s);
+//    cout << "match set: ";
+//    printSetOfVectors(s);
 
     for(auto edge = s.begin(); edge != s.end(); ++edge){
         if(bucket.find(edge->at(0)) != bucket.end()) {
             csrTuple t(edge->at(1), csr.getTent(edge->at(0)) + edge->at(2));
-            cout << "added: (" <<  t.first << ", " << t.second << ")" << endl;
+//            cout << "added: (" <<  t.first << ", " << t.second << ")" << endl;
             result.insert(t);
         }
     }

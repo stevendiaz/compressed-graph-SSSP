@@ -34,7 +34,6 @@ def delta_step(graph, delta):
 
     buckets = WorkList(graph, delta)
     while buckets.has_elements():
-        graph.print_node_labels()
         S = set()
         i = buckets.get_index()
         while len(buckets.get(i)) > 0:
@@ -43,7 +42,10 @@ def delta_step(graph, delta):
             buckets.set(i, set())
             buckets.relax_nodes(graph, req)
         req = heavy_matches(graph, S, heavy)
+        print(req)
         buckets.relax_nodes(graph, req)
+        graph.print_node_labels()
+        print('')
     graph.print_node_labels()
     print 'Relaxations: %d' % relax_count
 

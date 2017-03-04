@@ -2,7 +2,9 @@
 // Created by Jia Li on 3/2/17.
 //
 
+#include "SSSP.h"
 #include "Worklist.h"
+#include "debug.h"
 
 Worklist::Worklist(CSR graph, int32_t delta) : csr(graph), delta(delta), relaxCount(0) {
     buckets = map<long, set<int32_t>>();
@@ -16,17 +18,17 @@ Worklist::Worklist(CSR graph, int32_t delta) : csr(graph), delta(delta), relaxCo
         buckets[i].insert(w);
     }
 
-    cout << "buckets: ";
-    cout << "{";
+//    cout << "buckets: ";
+//    cout << "{";
     for(auto i = buckets.begin(); i != buckets.end(); ++i){
-        cout << i->first << ": " ;
-        cout << "(";
+//        cout << i->first << ": " ;
+//        cout << "(";
         for(auto it = i->second.begin(); it != i->second.end(); ++it){
-            cout << *it << " ";
+//            cout << *it << " ";
         }
-        cout << ") ";
+//        cout << ") ";
     }
-    cout << "}" << endl;
+//    cout << "}" << endl;
 
     light = set<vector<int32_t>>();
     heavy = set<vector<int32_t>>();
@@ -42,7 +44,7 @@ bool Worklist::hasElements() {
 long Worklist::getIndex() {
     for(auto it = buckets.begin(); it != buckets.end(); ++it)
         if(it->second.size() > 0) {
-            cout << "key: " << it->first << endl;
+//            cout << "key: " << it->first << endl;
             return it->first;
         }
 
@@ -101,3 +103,14 @@ void Worklist::setHeavy(set<vector<int32_t>> s) {
     heavy = s;
 }
 
+set<csrTuple> Worklist::match(set<int32_t> bucket, set<vector<int32_t>> s) {
+    set<csrTuple> result;
+
+    for(auto edge = s.begin(); edge != s.end(); ++edge) {
+        if(bucket.find(edge->at(0)) != bucket.end()) {
+            csrTuple t(edge->at(1), csr.getTent(edge->at(0)) + edge->at(2));
+            result.insert(t);
+        }
+    }
+    return result;
+}
