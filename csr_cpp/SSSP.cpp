@@ -33,15 +33,11 @@ void DeltaStep::run() {
         long i = worklist.getIndex();
         while(!worklist.get(i).empty()){
             set<int32_t> bucket = worklist.get(i);
-            cout << "light match!" << endl;
             set<csrTuple> req = match(bucket, worklist.getLight());
             s.insert(bucket.begin(), bucket.end());
             worklist.put(i, set<int32_t>());
             worklist.relaxNodes(req);
-            cout << "DeltaStep::run node labels" << endl;
-            csr->printNodeLabels();
         }
-        cout << "heavy match!" << endl;
         set<csrTuple> req = match(s, worklist.getHeavy());
         worklist.relaxNodes(req);
     }
@@ -51,16 +47,15 @@ void DeltaStep::run() {
 }
 
 set<csrTuple> DeltaStep::match(set<int32_t> bucket, set<vector<int32_t>> matchSet) {
-//    cout << "DeltaStep::match" << endl;
     set<csrTuple> result;
-//    csr.printNodeLabels();
+    //csr->printNodeLabels();
 
-//    cout << "bucket: ";
-//    printSet(bucket);
-//    cout << endl;
-//
-//    cout << "match set: ";
-//    printSetOfVectors(matchSet);
+    /*cout << "bucket: ";
+    printSet(bucket);
+    cout << endl;*/
+
+    /*cout << "match set: ";
+    printSetOfVectors(matchSet);*/
 
     for(auto edge = matchSet.begin(); edge != matchSet.end(); ++edge){
         if(bucket.find(edge->at(0)) != bucket.end()) {

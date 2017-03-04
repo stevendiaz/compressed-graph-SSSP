@@ -16,7 +16,7 @@ Worklist::Worklist(CSR *graph, int32_t delta) : csr(graph), delta(delta), relaxC
         buckets[i].insert(w);
     }
 
-//    printBuckets(buckets);
+    //printBuckets(buckets);
     light = set<vector<int32_t>>();
     heavy = set<vector<int32_t>>();
 }
@@ -46,15 +46,10 @@ void Worklist::put(long i, set<int32_t> nodes) {
 }
 
 void Worklist::relax(int32_t w, long d) {
-//    cout << "Worklist::relax" << endl;
     ++relaxCount;
     long tentCost = csr->getTent(w);
     if(d < tentCost){
-//        cout << "before set: " << endl;
-//        csr.printNodeLabels();
         csr->setTent(w, d);
-//        cout << "after set: " << endl;
-//        csr.printNodeLabels();
         long i = floor(tentCost/delta);
         if(buckets[i].find(w) != buckets[i].end()) buckets[i].erase(w);
 
@@ -65,17 +60,12 @@ void Worklist::relax(int32_t w, long d) {
 }
 
 void Worklist::relaxNodes(set<csrTuple> req) {
-    cout << "Worklist::relaxNodes()" <<endl;
     vector<csrTuple> reqVector(req.begin(), req.end());
     random_shuffle(reqVector.begin(), reqVector.end());
 
     for (auto it = reqVector.begin(); it != reqVector.end(); ++it) {
         relax(it->first, it->second);
     }
-
-    cout << "updated node labels" << endl;
-    csr->printNodeLabels();
-    cout << "exit Worklist::relaxNodes()" << endl;
 }
 
 void Worklist::printRelaxCount() {
