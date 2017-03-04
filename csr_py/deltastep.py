@@ -7,7 +7,6 @@ def parse_input():
     line = raw_input().split()
     size = int(line[2])
     num_edges = int(line[3])
-    tent = [0] * num_edges
     matrix = CSRImpl(size, size)
     for _ in xrange(num_edges):
         line = raw_input().split()
@@ -37,11 +36,11 @@ def delta_step(graph, delta):
         S = set()
         i = buckets.get_index()
         while len(buckets.get(i)) > 0:
-            req = light_matches(graph, buckets.get(i), light)
+            req = match(graph, buckets.get(i), light)
             S = S.union(buckets.get(i))
             buckets.set(i, set())
             buckets.relax_nodes(graph, req)
-        req = heavy_matches(graph, S, heavy)
+        req = match(graph, S, heavy)
         buckets.relax_nodes(graph, req)
     graph.print_node_labels()
     print 'Relaxations: %d' % relax_count
@@ -66,29 +65,13 @@ def get_index(buckets):
         if len(buckets[key]) > 0:
             return key
 
-def make_buckets(graph, delta):
-    B = {}
-    for v in graph.iterate():
-        i = math.floor(graph.get_tent(v[0])/delta)
-        if i not in B:
-            B[i] = set([v[0]])
-        else:
-            B[i].add(v[0])
-    return B
-
-def heavy_matches(graph, S, heavy):
+def match(graph, s, match_set):
     result = set()
-    for edge in heavy:
-        if edge[0] in S:
+    for edge in match_set:
+        if edge[0] in s:
            result.add((edge[1], graph.get_tent(edge[0]) + edge[2]))
     return result
 
-def light_matches(graph, bucket, light):
-    result = set()
-    for edge in light:
-        if edge[0] in bucket:
-            result.add((edge[1], graph.get_tent(edge[0]) + edge[2]))
-    return result
 
 def has_elements(buckets):
     for i in buckets.keys():
@@ -107,7 +90,6 @@ class CSRImpl:
         self.numCols = numCols
 
     def get(self, x, y):
-        entries_in_row = self.IA[x + 1] - self.IA[x]
         for i in xrange(self.IA[x], self.IA[x+1]):
             if self.JA[i] == y:
                 return self.value[i]
