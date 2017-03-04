@@ -1,7 +1,8 @@
 #include "CSR.h"
 
 /* CSRImpl Class Methods */
-CSR::CSR(int32_t size) : size(size) {
+CSR::CSR(int32_t size) : size(size + 1) {
+    size += 1;
     value = vector<int32_t>();
     IA = vector<int32_t>(size + 1, 0);
     JA = vector<int32_t>();
@@ -80,7 +81,7 @@ vector <vector<int32_t>> CSR::iterate() {
 }
 
 void CSR::printNodeLabels() {
-    for (size_t i = 0; i < nodeLabels.size(); ++i)
+    for (size_t i = 1; i < nodeLabels.size(); ++i)
         cout << i << " -> " << nodeLabels[i] << endl;
 }
 

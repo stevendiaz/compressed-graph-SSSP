@@ -51,7 +51,6 @@ CSR parseInput(){
         }
     }
 
-    csr.debugInfo();
     return csr;
 }
 

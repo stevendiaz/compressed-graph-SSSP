@@ -15,7 +15,6 @@ def parse_input():
             line.pop(0)
         u, v, weight = [int(x) for x in line]
         matrix.set(u, v, weight)
-    matrix.debug_info()
     delta_step(matrix, 1)
 
 def delta_step(graph, delta):
@@ -30,7 +29,7 @@ def delta_step(graph, delta):
         else:
             light.add(vertex)
         graph.set_tent(vertex[0], INT_MAX)
-    graph.set_tent(0, 0)
+    graph.set_tent(1, 0)
 
     buckets = WorkList(graph, delta)
     while buckets.has_elements():
@@ -42,12 +41,8 @@ def delta_step(graph, delta):
             buckets.set(i, set())
             buckets.relax_nodes(graph, req)
         req = heavy_matches(graph, S, heavy)
-        print(req)
         buckets.relax_nodes(graph, req)
-        graph.print_node_labels()
-        print('')
     graph.print_node_labels()
-    print 'Relaxations: %d' % relax_count
 
 def relax(graph, buckets, w, d, delta):
     global relax_count
@@ -101,6 +96,7 @@ def has_elements(buckets):
 
 class CSRImpl:
     def __init__(self, numRows, numCols):
+        numRows += 1
         self.value = []
         self.IA = [0] * (numRows + 1)
         self.JA = []
@@ -118,7 +114,6 @@ class CSRImpl:
 
     def set(self, x, y, v):
         if (x,y) not in self.seen_nodes:
-            print('%d %d' % (x, y))
             for i in range(x+1, self.numRows+1):
                 self.IA[i] += 1
             self.update_value(x, y, v)
@@ -166,7 +161,7 @@ class CSRImpl:
             print 'a %d %d %d' % (edge[0], edge[1], edge[2])
 
     def print_node_labels(self):
-        for i in xrange(len(self.node_labels)):
+        for i in xrange(1, len(self.node_labels)):
             print('%d -> %d' % (i, self.node_labels[i]))
 
     def largest_out_degree(self):

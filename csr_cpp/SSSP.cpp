@@ -24,7 +24,7 @@ void DeltaStep::run() {
         }
         csr.setTent(vertex->at(0), INT_MAX);
     }
-    csr.setTent(0, 0);
+    csr.setTent(1, 0);
 
     Worklist worklist = Worklist(csr, delta);
     worklist.setLight(tempLight);
@@ -40,15 +40,13 @@ void DeltaStep::run() {
             worklist.relaxNodes(req);
         }
         set<csrTuple> req = worklist.match(s, worklist.getHeavy());
-        cout << "Req: ";
-        cout << "[";
-        for(auto i = req.begin(); i != req.end(); ++i){
-            cout << "(" << i->first << ", " << i->second << ")";
-        }
-        cout << "] " << endl;
+//        cout << "Req: ";
+//        cout << "[";
+//        for(auto i = req.begin(); i != req.end(); ++i){
+//            cout << "(" << i->first << ", " << i->second << ")";
+//        }
+//       cout << "] " << endl;
         worklist.relaxNodes(req);
-        worklist.csr.printNodeLabels();
-        cout << endl;
     }
     worklist.csr.printNodeLabels();
     worklist.printRelaxCount();
