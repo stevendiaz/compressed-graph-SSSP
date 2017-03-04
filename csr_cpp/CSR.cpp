@@ -10,7 +10,6 @@ CSR::CSR(int32_t size) : size(size) {
 }
 
 void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
-//   cout << "CSR::updateValue" << endl;
     int32_t preVRowVal = IA[x];
     bool inserted = false;
     auto jit = JA.begin();
@@ -48,7 +47,6 @@ int32_t CSR::get(int32_t x, int32_t y) {
 }
 
 void CSR::put(int32_t x, int32_t y, int32_t val) {
-//    cout << "CSR::put" << endl;
     csrTuple coordinate(x, y);
     if (seenNodes.find(coordinate) == seenNodes.end()) {
         cout << x << " " << y << endl;
@@ -60,7 +58,6 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
 }
 
 vector <vector<int32_t>> CSR::iterate() {
-//    cout << "CSR::iterate" << endl;
     vector <vector<int32_t>> result;
 
     for (size_t i = 1; i < IA.size(); ++i) {

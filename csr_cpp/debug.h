@@ -3,10 +3,10 @@
 //
 
 #include <iostream>
+#include <cstdint>
 #include <set>
 #include <vector>
-#include "CSR.h"
-#include "SSSP.h"
+#include <map>
 
 #ifndef CSR_CPP_DEBUG_H
 #define CSR_CPP_DEBUG_H
@@ -41,5 +41,17 @@ void printSet(set<T> v){
     cout << "] ";
 }
 
-
+//void printBuckets(map<long, set<int32_t>> buckets) {
+//    cout << "buckets: ";
+//    cout << "{";
+//    for(auto i = buckets.begin(); i != buckets.end(); ++i){
+//        cout << i->first << ": " ;
+//        cout << "(";
+//        for(auto it = i->second.begin(); it != i->second.end(); ++it){
+//            cout << *it << " ";
+//        }
+//        cout << ") ";
+//    }
+//    cout << "}" << endl;
+//}
 #endif //CSR_CPP_DEBUG_H

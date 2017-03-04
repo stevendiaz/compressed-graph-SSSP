@@ -31,7 +31,7 @@ int32_t stoi32(string s){
     return (int32_t)(stoi(s));
 }
 
-CSR parseInput(){
+CSR* parseInput(){
     //Extract info from first line
     char buffer[MAX_CHARS_PER_LINE];
     cin.getline(buffer, MAX_CHARS_PER_LINE);
@@ -42,24 +42,23 @@ CSR parseInput(){
 //    cout << "size = " << size << ", edges = " << edges << endl;
 
     //Construct CSR as we read the file
-    CSR csr = CSR(size);
+    CSR* csr = new CSR(size);
     for(int i = 0; i < edges; ++i){
         cin.getline(buffer, MAX_CHARS_PER_LINE);
         line = split(buffer, ' ');
         if(line[0] == "a") {
-            csr.put(stoi32(line[1]), stoi32(line[2]), stoi32(line[3]));
+            csr->put(stoi32(line[1]), stoi32(line[2]), stoi32(line[3]));
         }
     }
 
-    csr.debugInfo();
+    csr->debugInfo();
     return csr;
 }
 
 
 int main(){
-    CSR csr = parseInput();
+    CSR* csr = parseInput();
     DeltaStep deltaStep = DeltaStep(csr, 1);
-    //cout << "Running Delta Step:" << endl;
     deltaStep.run();
 
     return 0;

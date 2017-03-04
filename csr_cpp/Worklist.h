@@ -11,10 +11,11 @@
 #include <cmath>
 #include <algorithm>
 #include "CSR.h"
+#include "debug.h"
 
 class Worklist {
 private:
-    CSR csr;
+    CSR* csr;
     int32_t delta;
     int32_t relaxCount;
     map<long, set<int32_t>> buckets;
@@ -23,7 +24,7 @@ private:
 
     void relax(int32_t e0, long e1);
 public:
-    Worklist(CSR graph, int32_t delta);
+    Worklist(CSR *graph, int32_t delta);
     bool hasElements();
     long getIndex();
     set<int32_t> get(long i);
