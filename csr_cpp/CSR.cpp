@@ -6,7 +6,7 @@ CSR::CSR(int32_t size) : size(size) {
     IA = vector<int32_t>(size + 1, 0);
     JA = vector<int32_t>();
     seenNodes = map < csrTuple, int32_t > ();
-    nodeLabels = vector<int32_t>(size, 0);
+    nodeLabels = vector<long>(size, 0);
 }
 
 void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
@@ -84,11 +84,11 @@ void CSR::printNodeLabels() {
         cout << i << " -> " << nodeLabels[i] << endl;
 }
 
-int32_t CSR::getTent(int32_t u) {
+long CSR::getTent(int32_t u) {
     return nodeLabels[u];
 }
 
-void CSR::setTent(int32_t u, int32_t val) {
+void CSR::setTent(int32_t u, long val) {
     nodeLabels[u] = val;
 }
 

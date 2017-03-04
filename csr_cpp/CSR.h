@@ -8,7 +8,7 @@
 #ifndef CSR_h
 #define CSR_h
 
-typedef std::pair<int32_t, int32_t> csrTuple;
+typedef std::pair<int32_t, long> csrTuple;
 
 using namespace std;
 
@@ -19,7 +19,7 @@ private:
     vector<int32_t> IA;
     vector<int32_t> JA;
     map<csrTuple, int32_t> seenNodes;
-    vector<int32_t> nodeLabels;
+    vector<long> nodeLabels;
 
 
     void updateValue(int32_t x, int32_t y, int32_t val);
@@ -32,8 +32,8 @@ public:
     vector<vector<int32_t>> iterate();
     void printNodeLabels();
     //int32_t getLargestOutDegree();
-    int32_t getTent(int32_t u);
-    void setTent(int32_t u, int32_t val);
+    long getTent(int32_t u);
+    void setTent(int32_t u, long val);
     void debugInfo();
 };
 

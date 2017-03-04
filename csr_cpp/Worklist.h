@@ -17,17 +17,17 @@ private:
     CSR csr;
     int32_t delta;
     int32_t relaxCount;
-    map<int32_t, set<int32_t>> buckets;
+    map<long, set<int32_t>> buckets;
     set<vector<int32_t>> heavy;
     set<vector<int32_t>> light;
 
-    void relax(int32_t e0, int32_t e1);
+    void relax(int32_t e0, long e1);
 public:
     Worklist(CSR graph, int32_t delta);
     bool hasElements();
-    int32_t getIndex();
-    set<int32_t> get(int32_t i);
-    void put(int32_t i, set<int32_t> nodes);
+    long getIndex();
+    set<int32_t> get(long i);
+    void put(long i, set<int32_t> nodes);
     void relaxNodes(set<csrTuple> req);
     void printRelaxCount();
     set<vector<int32_t>> getLight();

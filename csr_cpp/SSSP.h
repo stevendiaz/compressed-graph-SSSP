@@ -24,18 +24,18 @@ public:
     void run();
     set<csrTuple> match(set<int32_t> bucket, set<vector<int32_t>> s);
 };
-//
-//class Dijkstra : DeltaStep {
-//public:
-//    Dijkstra(CSR csr);
-//    void run();
-//};
-//
-//class ChaoticRelaxation : DeltaStep {
-//public:
-//    ChaoticRelaxation(CSR csr);
-//    void run();
-//};
+
+class Dijkstra : DeltaStep {
+public:
+    Dijkstra(CSR csr);
+    void run();
+};
+
+class ChaoticRelaxation : DeltaStep {
+public:
+    ChaoticRelaxation(CSR csr);
+    void run();
+};
 
 
 #endif //CSR_CPP_SSSP_H
