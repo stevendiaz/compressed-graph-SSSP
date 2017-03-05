@@ -6,7 +6,7 @@
 #include "Worklist.h"
 #include "debug.h"
 
-Worklist::Worklist(CSR graph, int32_t delta) : csr(graph), delta(delta), relaxCount(0) {
+Worklist::Worklist(CSR graph, int32_t delta) : csr(graph), delta(delta), relaxEdgeCount(0), relaxNodeCount(0) {
     buckets = map<long, set<int32_t>>();
     vector<vector<int32_t>> vals = graph.iterate();
     int32_t w = 0;
@@ -60,7 +60,7 @@ void Worklist::put(long i, set<int32_t> nodes) {
 }
 
 void Worklist::relax(int32_t w, long d) {
-    ++relaxCount;
+    ++relaxEdgeCount;
     long tentCost = csr.getTent(w);
     if(d < tentCost){
         csr.setTent(w, d);
@@ -84,7 +84,8 @@ void Worklist::relaxNodes(set<csrTuple> req) {
 }
 
 void Worklist::printRelaxCount() {
-    cout << "Relaxations: " << relaxCount << endl;
+    cout << "Edge relaxations: " << relaxEdgeCount << endl;
+    cout << "Node relaxations: " << relaxNodeCount << endl;
 }
 
 set<vector<int32_t>> Worklist::getLight() {
@@ -108,6 +109,9 @@ set<csrTuple> Worklist::match(set<int32_t> bucket, set<vector<int32_t>> s) {
 
     for(auto edge = s.begin(); edge != s.end(); ++edge) {
         if(bucket.find(edge->at(0)) != bucket.end()) {
+            csr.relaxNode(edge->at(0), edge->at(1));
+            if(csr.nodeFullyRelaxed(edge->at(0))) ++relaxNodeCount;
+
             csrTuple t(edge->at(1), csr.getTent(edge->at(0)) + edge->at(2));
             result.insert(t);
         }

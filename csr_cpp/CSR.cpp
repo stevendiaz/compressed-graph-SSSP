@@ -8,6 +8,7 @@ CSR::CSR(int32_t size) : size(size + 1) {
     JA = vector<int32_t>();
     seenNodes = map < csrTuple, int32_t > ();
     nodeLabels = vector<long>(size, 0);
+    relaxMap = map<int32_t, set<int32_t>>();
 }
 
 void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
@@ -49,6 +50,9 @@ int32_t CSR::get(int32_t x, int32_t y) {
 
 void CSR::put(int32_t x, int32_t y, int32_t val) {
     csrTuple coordinate(x, y);
+    if(relaxMap.find(x) == relaxMap.end()) relaxMap[x] = set<int32_t>({y});
+    else relaxMap[x].insert(y);
+
     if (seenNodes.find(coordinate) == seenNodes.end()) {
 //        cout << x << " " << y << endl;
         for (int i = x + 1; i <= size; ++i){
@@ -125,4 +129,13 @@ int32_t CSR::getLargestOutDegree() {
        }
    }
    return row;
+}
+
+bool CSR::nodeFullyRelaxed(int32_t node){
+    return relaxMap[node].size() == 0;
+}
+
+void CSR::relaxNode(int32_t src, int32_t dest){
+    if(relaxMap[src].find(dest) != relaxMap[src].end())
+        relaxMap[src].erase(dest);
 }

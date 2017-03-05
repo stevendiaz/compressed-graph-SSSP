@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <set>
 #include <utility>
 #include <climits>
 
@@ -21,6 +22,7 @@ private:
     vector<int32_t> JA;
     map<csrTuple, int32_t> seenNodes;
     vector<long> nodeLabels;
+    map<int32_t, set<int32_t>> relaxMap;
 
 
     void updateValue(int32_t x, int32_t y, int32_t val);
@@ -36,6 +38,8 @@ public:
     long getTent(int32_t u);
     void setTent(int32_t u, long val);
     void debugInfo();
+    bool nodeFullyRelaxed(int32_t node);
+    void relaxNode(int32_t src, int32_t dest);
 };
 
 #endif

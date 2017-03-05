@@ -40,12 +40,12 @@ void DeltaStep::run() {
             worklist.relaxNodes(req);
         }
         set<csrTuple> req = worklist.match(s, worklist.getHeavy());
-//        cout << "Req: ";
-//        cout << "[";
-//        for(auto i = req.begin(); i != req.end(); ++i){
-//            cout << "(" << i->first << ", " << i->second << ")";
-//        }
-//       cout << "] " << endl;
+      //   cout << "Req: ";
+      //   cout << "[";
+      //   for(auto i = req.begin(); i != req.end(); ++i){
+      //      cout << "(" << i->first << ", " << i->second << ")";
+      //   }
+      // cout << "] " << endl;
         worklist.relaxNodes(req);
     }
     worklist.csr.printNodeLabels();
@@ -53,35 +53,15 @@ void DeltaStep::run() {
 
 }
 
-set<csrTuple> DeltaStep::match(set<int32_t> bucket, set<vector<int32_t>> s) {
-//    cout << "DeltaStep::match" << endl;
-    set<csrTuple> result;
 
-//    cout << "bucket: ";
-//    printSet(bucket);
+// Dijkstra::Dijkstra(CSR csr) : DeltaStep(csr, 1) {}
 
-//    cout << "match set: ";
-//    printSetOfVectors(s);
+// void Dijkstra::run() {
+//     DeltaStep::run();
+// }
 
-    for(auto edge = s.begin(); edge != s.end(); ++edge){
-        if(bucket.find(edge->at(0)) != bucket.end()) {
-            csrTuple t(edge->at(1), csr.getTent(edge->at(0)) + edge->at(2));
-//            cout << "added: (" <<  t.first << ", " << t.second << ")" << endl;
-            result.insert(t);
-        }
-    }
-    return result;
-}
+// ChaoticRelaxation::ChaoticRelaxation(CSR csr) : DeltaStep(csr, 10) {}
 
-
-Dijkstra::Dijkstra(CSR csr) : DeltaStep(csr, 1) {}
-
-void Dijkstra::run() {
-    DeltaStep::run();
-}
-
-ChaoticRelaxation::ChaoticRelaxation(CSR csr) : DeltaStep(csr, 10) {}
-
-void ChaoticRelaxation::run() {
-    DeltaStep::run();
-}
+// void ChaoticRelaxation::run() {
+//     DeltaStep::run();
+// }

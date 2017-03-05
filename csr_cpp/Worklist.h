@@ -17,7 +17,8 @@
 class Worklist {
 private:
     int32_t delta;
-    int32_t relaxCount;
+    int32_t relaxEdgeCount;
+    int32_t relaxNodeCount;
     map<long, set<int32_t>> buckets;
     set<vector<int32_t>> heavy;
     set<vector<int32_t>> light;
