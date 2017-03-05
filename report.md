@@ -42,9 +42,9 @@ return row;
 #### Experiment - Relaxations for different random seeds
 | Seed | Edge Relaxations | Node Relaxations | Total relaxations |
 |------|------------------|------------------|-------------------|
-| 0    | 0                | 0                |                   |
-| 20   | 0                | 0                |                   |
-| 40   | 0                | 0                |                   |
+| 10   | 175499           | 2518             | 178017            |
+| 20   | 175499           | 2518             | 178017            |
+| 50   | 175499           | 2518             | 178017            |
 
 
 ## Dijkstra's Algorithm
