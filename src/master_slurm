@@ -1,0 +1,44 @@
+#!/bin/bash
+#-----------------------------------------------------------------
+# Example SLURM job script to run serial applications on TACC's
+# Stampede system.
+#
+# This script requests one core (out of 16) on one node. The job
+# will have access to all the memory in the node.  Note that this
+# job will be charged as if all 16 cores were requested.
+#-----------------------------------------------------------------
+
+#SBATCH -J Project3           # Job name
+#SBATCH -p development           # Queue name
+#SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
+#SBATCH -n 1                     # Total number of tasks
+#SBATCH -t 01:30:00              # Run time
+
+# Load any necessary module
+module load gcc/4.9.3
+
+#Compile
+make choatic
+make delta
+make dijkstra
+make deltaOptimal
+
+#Chaotic
+./chaotic < /work/01131/rashid/class-inputs/rmat_graphs/rmat15.dimacs > ../output/chaotic.txt
+
+#Delta
+./delta < /work/01131/rashid/class-inputs/rmat_graphs/rmat15.dimacs > ../output/delta15.txt
+./delta < /work/01131/rashid/class-inputs/road/road-NY.dimacs > ../output/deltaNY.txt
+
+#Dijkstra
+./dijkstra < /work/01131/rashid/class-inputs/rmat_graphs/rmat15.dimacs > ../output/dijkstra15.txt
+./dijkstra < /work/01131/rashid/class-inputs/road/road-NY.dimacs > ../output/dijkstraNY.txt
+
+#Execute
+./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat20.dimacs > ../output/rmat20_deltaOptimal.txt
+./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat20.dimacs > ../output/rmat22_deltaOptimal.txt
+./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat20.dimacs > ../output/rmat23_deltaOptimal.txt
+./deltaOptimal.o < /work/01131/rashid/class-inputs/road/road-FL > ../output/roadFL_deltaOptimal.txt
+
+#Clean
+make clean
