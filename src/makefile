@@ -14,17 +14,17 @@ status:
 	git remote -v
 	git status
 
-#prog: main.cpp CSR.cpp Worklist.cpp SSSP.cpp
-#	$(CXX) $(CXXFLAGS) main.cpp CSR.cpp Worklist.cpp SSSP.cpp -o prog
+chaotic: chaoticExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp Parser.cpp
+	$(CXX) $(CXXFLAGS) chaoticExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp Parser.cpp -o chaotic.o
 
-chaotic: chaoticExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp
-	$(CXX) $(CXXFLAGS) chaoticExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp -o chaotic.o
+dijkstra: dijkstraExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp Parser.cpp
+	$(CXX) $(CXXFLAGS) dijkstraExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp Parser.cpp -o dijkstra.o
 
-dijkstra: dijkstraExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp
-	$(CXX) $(CXXFLAGS) dijkstraExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp -o dijkstra.o
+delta: deltaStepExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp Parser.cpp
+	$(CXX) $(CXXFLAGS) deltaStepExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp Parser.cpp -o delta.o
 
-delta: deltaStepExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp
-	$(CXX) $(CXXFLAGS) deltaStepExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp -o delta.o
+deltaOptimal: deltaOptimalExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp Parser.cpp
+	$(CXX) $(CXXFLAGS) deltaOptimalExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp Parser.cpp -o deltaOptimal.o
 
-deltaOptimal: deltaOptimalExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp
-	$(CXX) $(CXXFLAGS) deltaOptimalExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp -o deltaOptimal.o
+degree: getLargestOutDegree.cpp CSR.cpp Parser.cpp
+	$(CXX) $(CXXFLAGS) getLargestOutDegree.cpp CSR.cpp Parser.cpp -o degree.o
