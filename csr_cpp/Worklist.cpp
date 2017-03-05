@@ -2,21 +2,34 @@
 // Created by Jia Li on 3/2/17.
 //
 
+#include "SSSP.h"
 #include "Worklist.h"
+#include "debug.h"
 
-Worklist::Worklist(CSR *graph, int32_t delta) : csr(graph), delta(delta), relaxCount(0) {
+Worklist::Worklist(CSR graph, int32_t delta) : csr(graph), delta(delta), relaxCount(0) {
     buckets = map<long, set<int32_t>>();
-    vector<vector<int32_t>> vals = graph->iterate();
+    vector<vector<int32_t>> vals = graph.iterate();
     int32_t w = 0;
 
     for(auto it = vals.begin(); it != vals.end(); ++it){
         w = it->at(0);
-        long i = floor(graph->getTent(w)/delta);
+        long i = floor(graph.getTent(w)/delta);
         if(buckets.find(i) == buckets.end()) buckets[i] = set<int32_t>();
         buckets[i].insert(w);
     }
 
-    //printBuckets(buckets);
+//    cout << "buckets: ";
+//    cout << "{";
+    for(auto i = buckets.begin(); i != buckets.end(); ++i){
+//        cout << i->first << ": " ;
+//        cout << "(";
+        for(auto it = i->second.begin(); it != i->second.end(); ++it){
+//            cout << *it << " ";
+        }
+//        cout << ") ";
+    }
+//    cout << "}" << endl;
+
     light = set<vector<int32_t>>();
     heavy = set<vector<int32_t>>();
 }
@@ -31,6 +44,7 @@ bool Worklist::hasElements() {
 long Worklist::getIndex() {
     for(auto it = buckets.begin(); it != buckets.end(); ++it)
         if(it->second.size() > 0) {
+//            cout << "key: " << it->first << endl;
             return it->first;
         }
 
@@ -47,19 +61,20 @@ void Worklist::put(long i, set<int32_t> nodes) {
 
 void Worklist::relax(int32_t w, long d) {
     ++relaxCount;
-    long tentCost = csr->getTent(w);
+    long tentCost = csr.getTent(w);
     if(d < tentCost){
-        csr->setTent(w, d);
+        csr.setTent(w, d);
         long i = floor(tentCost/delta);
         if(buckets[i].find(w) != buckets[i].end()) buckets[i].erase(w);
-
         long newInd = floor(d/delta);
-        if(buckets.find(newInd) == buckets.end()) buckets[newInd] = set<int32_t>({w});
+        if(buckets.find(newInd) == buckets.end())
+            buckets[newInd] = set<int32_t>({w});
         else buckets[newInd].insert(w);
     }
 }
 
 void Worklist::relaxNodes(set<csrTuple> req) {
+//    cout << "Worklist::relaxNodes()" <<endl;
     vector<csrTuple> reqVector(req.begin(), req.end());
     random_shuffle(reqVector.begin(), reqVector.end());
 
@@ -88,3 +103,14 @@ void Worklist::setHeavy(set<vector<int32_t>> s) {
     heavy = s;
 }
 
+set<csrTuple> Worklist::match(set<int32_t> bucket, set<vector<int32_t>> s) {
+    set<csrTuple> result;
+
+    for(auto edge = s.begin(); edge != s.end(); ++edge) {
+        if(bucket.find(edge->at(0)) != bucket.end()) {
+            csrTuple t(edge->at(1), csr.getTent(edge->at(0)) + edge->at(2));
+            result.insert(t);
+        }
+    }
+    return result;
+}

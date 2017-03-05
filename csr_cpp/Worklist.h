@@ -11,11 +11,11 @@
 #include <cmath>
 #include <algorithm>
 #include "CSR.h"
+#include "SSSP.h"
 #include "debug.h"
 
 class Worklist {
 private:
-    CSR* csr;
     int32_t delta;
     int32_t relaxCount;
     map<long, set<int32_t>> buckets;
@@ -24,7 +24,8 @@ private:
 
     void relax(int32_t e0, long e1);
 public:
-    Worklist(CSR *graph, int32_t delta);
+    CSR csr;
+    Worklist(CSR graph, int32_t delta);
     bool hasElements();
     long getIndex();
     set<int32_t> get(long i);
@@ -35,6 +36,7 @@ public:
     void setLight(set<vector<int32_t>> s);
     set<vector<int32_t>> getHeavy();
     void setHeavy(set<vector<int32_t>> s);
+    set<csrTuple> match(set<int32_t> bucket, set<vector<int32_t>> s);
 
 };
 

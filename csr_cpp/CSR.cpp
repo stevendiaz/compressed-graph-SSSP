@@ -1,7 +1,8 @@
 #include "CSR.h"
 
 /* CSRImpl Class Methods */
-CSR::CSR(int32_t size) : size(size) {
+CSR::CSR(int32_t size) : size(size + 1) {
+    size += 1;
     value = vector<int32_t>();
     IA = vector<int32_t>(size + 1, 0);
     JA = vector<int32_t>();
@@ -49,7 +50,7 @@ int32_t CSR::get(int32_t x, int32_t y) {
 void CSR::put(int32_t x, int32_t y, int32_t val) {
     csrTuple coordinate(x, y);
     if (seenNodes.find(coordinate) == seenNodes.end()) {
-        cout << x << " " << y << endl;
+//        cout << x << " " << y << endl;
         for (int i = x + 1; i <= size; ++i){
             ++IA[i];
         }
@@ -77,8 +78,14 @@ vector <vector<int32_t>> CSR::iterate() {
 }
 
 void CSR::printNodeLabels() {
-    for (size_t i = 0; i < nodeLabels.size(); ++i)
-        cout << i << " -> " << nodeLabels[i] << endl;
+    cout << "0 INF" << endl;
+    for (size_t i = 1; i < nodeLabels.size(); ++i){
+        cout << i << " ";
+        if(IA[i+1] - IA[i-1] == 0) cout << 0 << endl;
+        else if (nodeLabels[i] == INT_MAX) cout << "INF" << endl;
+        else cout << nodeLabels[i] << endl;
+    }
+
 }
 
 long CSR::getTent(int32_t u) {
