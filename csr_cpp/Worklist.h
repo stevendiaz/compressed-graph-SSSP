@@ -23,7 +23,6 @@ private:
     set<vector<int32_t>> heavy;
     set<vector<int32_t>> light;
 
-    void relax(int32_t e0, long e1);
 public:
     CSR csr;
     Worklist(CSR graph, int32_t delta);
@@ -39,6 +38,7 @@ public:
     void setHeavy(set<vector<int32_t>> s);
     set<csrTuple> match(set<int32_t> bucket, set<vector<int32_t>> s);
 
+    void relax(int32_t e0, long e1);
 };
 
 

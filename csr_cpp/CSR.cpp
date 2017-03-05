@@ -7,7 +7,7 @@ CSR::CSR(int32_t size) : size(size + 1) {
     IA = vector<int32_t>(size + 1, 0);
     JA = vector<int32_t>();
     seenNodes = map < csrTuple, int32_t > ();
-    nodeLabels = vector<long>(size, 0);
+    nodeLabels = vector<long>(size, INT_MAX);
     relaxMap = map<int32_t, set<int32_t>>();
 }
 
@@ -85,8 +85,8 @@ void CSR::printNodeLabels() {
     cout << "0 INF" << endl;
     for (size_t i = 1; i < nodeLabels.size(); ++i){
         cout << i << " ";
-        if(IA[i+1] - IA[i-1] == 0) cout << 0 << endl;
-        else if (nodeLabels[i] == INT_MAX) cout << "INF" << endl;
+        //if(IA[i+1] - IA[i-1] == 0) cout << 0 << endl;
+        if (nodeLabels[i] == INT_MAX) cout << "INF" << endl;
         else cout << nodeLabels[i] << endl;
     }
 

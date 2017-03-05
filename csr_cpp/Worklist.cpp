@@ -62,8 +62,11 @@ void Worklist::put(long i, set<int32_t> nodes) {
 void Worklist::relax(int32_t w, long d) {
     ++relaxEdgeCount;
     long tentCost = csr.getTent(w);
+    if(w == 95) cout << " tentb4: " << tentCost << "\n";
     if(d < tentCost){
+	if(w == 95) cout << " getting set: " << d;	
         csr.setTent(w, d);
+	if(w == 95) cout << " after: " << csr.getTent(w) << endl;
         long i = floor(tentCost/delta);
         if(buckets[i].find(w) != buckets[i].end()) buckets[i].erase(w);
         long newInd = floor(d/delta);
@@ -79,6 +82,7 @@ void Worklist::relaxNodes(set<csrTuple> req) {
     random_shuffle(reqVector.begin(), reqVector.end());
 
     for (auto it = reqVector.begin(); it != reqVector.end(); ++it) {
+	if(it->first == 95) cout << " b4r: " << it->second;
         relax(it->first, it->second);
     }
 }
@@ -111,7 +115,11 @@ set<csrTuple> Worklist::match(set<int32_t> bucket, set<vector<int32_t>> s) {
         if(bucket.find(edge->at(0)) != bucket.end()) {
             csr.relaxNode(edge->at(0), edge->at(1));
             if(csr.nodeFullyRelaxed(edge->at(0))) ++relaxNodeCount;
-
+	    
+            //cout << "from edge: " << edge->at(0);
+	    //cout << " to edge: " << edge->at(1); 
+            //cout << " weight:  " << edge->at(2);
+            //cout << " sum: " << csr.getTent(edge->at(0)) + edge->at(2);
             csrTuple t(edge->at(1), csr.getTent(edge->at(0)) + edge->at(2));
             result.insert(t);
         }
