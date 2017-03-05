@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <utility>
+#include <climits>
 
 #ifndef CSR_h
 #define CSR_h
@@ -31,7 +32,7 @@ public:
     void put(int32_t x, int32_t y, int32_t val);
     vector<vector<int32_t>> iterate();
     void printNodeLabels();
-    //int32_t getLargestOutDegree();
+    int32_t getLargestOutDegree();
     long getTent(int32_t u);
     void setTent(int32_t u, long val);
     void debugInfo();
