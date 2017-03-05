@@ -7,12 +7,14 @@ int main(){
     Parser p = Parser();
 	CSR csr = p.parseInput();
 
-    int32_t step = INT_MAX/5;
-    for(int i = 1; i <= INT_MAX; i += step){
-        cout << "step = " << i << endl;
-        DeltaStep deltaStep = DeltaStep(csr, i, 10);
+    int32_t step = 1;
+    int32_t increment = INT_MAX/5;
+    for(int i = 0; i < 6; ++i){
+        cout << "step = " << step + i * increment << endl;
+        DeltaStep deltaStep = DeltaStep(csr, step, 10);
         deltaStep.run(true, true);
-    } 
+        cout << endl;
+    }
 
 
     return 0;
