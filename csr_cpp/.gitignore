@@ -3,3 +3,7 @@ CMakeLists.txt
 .idea/
 prog
 csr_py/.idea/
+chaotic
+dijkstra
+delta
+deltaOptimal

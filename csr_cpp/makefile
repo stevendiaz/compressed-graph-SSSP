@@ -14,5 +14,17 @@ status:
 	git remote -v
 	git status
 
-prog: main.cpp CSR.cpp Worklist.cpp SSSP.cpp
-	$(CXX) $(CXXFLAGS) main.cpp CSR.cpp Worklist.cpp SSSP.cpp -o prog
+#prog: main.cpp CSR.cpp Worklist.cpp SSSP.cpp
+#	$(CXX) $(CXXFLAGS) main.cpp CSR.cpp Worklist.cpp SSSP.cpp -o prog
+
+chaotic: chaoticExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp
+	$(CXX) $(CXXFLAGS) chaoticExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp -o chaotic
+
+dijkstra: dijkstra.cpp CSR.cpp Worklist.cpp SSSP.cpp
+	$(CXX) $(CXXFLAGS) dijkstra.cpp CSR.cpp Worklist.cpp SSSP.cpp -o dijkstra
+
+delta: deltaStep.cpp CSR.cpp Worklist.cpp SSSP.cpp
+	$(CXX) $(CXXFLAGS) deltaStep.cpp CSR.cpp Worklist.cpp SSSP.cpp -o delta
+
+deltaOptimal: deltaOptimal.cpp CSR.cpp Worklist.cpp SSSP.cpp
+	$(CXX) $(CXXFLAGS) deltaOptimal.cpp CSR.cpp Worklist.cpp SSSP.cpp -o deltaOptimal

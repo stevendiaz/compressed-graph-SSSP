@@ -4,12 +4,11 @@
 
 #include "SSSP.h"
 #include "Worklist.h"
-#include "debug.h"
 
 
-DeltaStep::DeltaStep(CSR csr, int32_t step) : csr(csr), delta(step) {}
+DeltaStep::DeltaStep(CSR csr, int32_t step, int seed) : csr(csr), delta(step), seed(seed) {}
 
-void DeltaStep::run() {
+void DeltaStep::run(bool printLabels, bool printRelaxCount) {
     vector <vector<int32_t>> graph = csr.iterate();
     set<vector<int32_t>> tempLight;
     set<vector<int32_t>> tempHeavy;
@@ -38,31 +37,11 @@ void DeltaStep::run() {
             set<csrTuple> req = worklist.match(bucket, worklist.getLight());
             s.insert(bucket.begin(), bucket.end());
             worklist.put(i, set<int32_t>());
-            worklist.relaxNodes(req);
+            worklist.relaxNodes(req, seed);
         }
         set<csrTuple> req = worklist.match(s, worklist.getHeavy());
-      //   cout << "Req: ";
-      //   cout << "[";
-      //   for(auto i = req.begin(); i != req.end(); ++i){
-      //      cout << "(" << i->first << ", " << i->second << ")";
-      //   }
-      // cout << "] " << endl;
-        worklist.relaxNodes(req);
+        worklist.relaxNodes(req, seed);
     }
-    worklist.csr.printNodeLabels();
-    worklist.printRelaxCount();
-
+    if(printLabels) worklist.csr.printNodeLabels();
+    if(printRelaxCount )worklist.printRelaxCount();
 }
-
-
-// Dijkstra::Dijkstra(CSR csr) : DeltaStep(csr, 1) {}
-
-// void Dijkstra::run() {
-//     DeltaStep::run();
-// }
-
-// ChaoticRelaxation::ChaoticRelaxation(CSR csr) : DeltaStep(csr, 10) {}
-
-// void ChaoticRelaxation::run() {
-//     DeltaStep::run();
-// }

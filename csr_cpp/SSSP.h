@@ -7,35 +7,23 @@
 
 #include <set>
 #include <climits>
+#include "util.h"
 #include "CSR.h"
-#include "debug.h"
 
 
 class DeltaStep {
 protected:
     CSR csr;
     int32_t delta;
+    int seed;
     set<vector<int32_t>> heavy;
     set<vector<int32_t>> light;
 
 public:
     DeltaStep();
-    DeltaStep(CSR csr, int32_t step);
-    void run();
-    set<csrTuple> match(set<int32_t> bucket, set<vector<int32_t>> matchSet);
+    DeltaStep(CSR csr, int32_t step, int seed);
+    void run(bool printNLabels, bool printRelaxCount);
 };
-
-// class Dijkstra : DeltaStep {
-// public:
-//     Dijkstra(CSR csr);
-//     void run();
-// };
-
-// class ChaoticRelaxation : DeltaStep {
-// public:
-//     ChaoticRelaxation(CSR csr);
-//     void run();
-// };
 
 
 #endif //CSR_CPP_SSSP_H

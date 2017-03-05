@@ -10,9 +10,10 @@
 #include <set>
 #include <cmath>
 #include <algorithm>
+#include <random>
 #include "CSR.h"
 #include "SSSP.h"
-#include "debug.h"
+#include "util.h"
 
 class Worklist {
 private:
@@ -30,7 +31,7 @@ public:
     long getIndex();
     set<int32_t> get(long i);
     void put(long i, set<int32_t> nodes);
-    void relaxNodes(set<csrTuple> req);
+    void relaxNodes(set<csrTuple> req, int seed);
     void printRelaxCount();
     set<vector<int32_t>> getLight();
     void setLight(set<vector<int32_t>> s);
