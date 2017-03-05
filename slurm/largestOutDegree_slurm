@@ -9,7 +9,7 @@
 #-----------------------------------------------------------------
 
 #SBATCH -J outdegree           	            # Job name
-#SBATCH -o output/largestOutDegree.out      # Specify stdout output file (%j expands to jobId)
+#SBATCH -o ../output/largestOutDegree.txt      # Specify stdout output file (%j expands to jobId)
 #SBATCH -p serial           	            # Queue name
 #SBATCH -N 1                                # Total number of nodes requested (16 cores/node)
 #SBATCH -n 1                                # Total number of tasks
@@ -19,7 +19,7 @@
 module load gcc/4.9.3
 
 #Compile
-cd src
+cd ../src
 make degree
 
 #Execute
