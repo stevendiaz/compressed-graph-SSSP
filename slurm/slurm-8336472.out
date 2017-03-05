@@ -1,0 +1,8 @@
+
+Lmod is automatically replacing "intel/15.0.2" with "gcc/4.9.3".
+
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) mvapich2/2.1
+
+g++ -std=c++11 dijkstraExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp -o dijkstra.o
