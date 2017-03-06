@@ -8,9 +8,8 @@
 # job will be charged as if all 16 cores were requested.
 #-----------------------------------------------------------------
 
-#SBATCH -J dijkstra15           	 # Job name
-#SBATCH -o output/dijkstra15.out   # Specify stdout output file (%j expands to jobId)
-#SBATCH -p normal           	 # Queue name
+#SBATCH -J dijkstra15            # Job name
+#SBATCH -p serial           	 # Queue name
 #SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
 #SBATCH -n 1                     # Total number of tasks
 #SBATCH -t 01:00:00              # Run time
@@ -19,7 +18,11 @@
 module load gcc/4.9.3
 
 #Compile
+cd ../src
 make dijkstra
 
 #Execute
-./dijkstra.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat15.dimacs
+./dijkstra.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat15.dimacs > ../output/dijkstra15.txt
+
+#Clean
+make clean
