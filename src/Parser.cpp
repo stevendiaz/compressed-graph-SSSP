@@ -34,9 +34,13 @@ CSR Parser::parseInput(){
         cin.getline(buffer, MAX_CHARS_PER_LINE);
         line = split(buffer);
         if(line[0] == "a") {
+//            cout << "put" << endl;
             csr.put(stoi32(line[1]), stoi32(line[2]), stoi32(line[3]));
+//            cout << "put successful" << endl;
         }
     }
+
+//    cout << "everything read" << endl;
 
     return csr;
 }

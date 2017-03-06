@@ -12,18 +12,25 @@ CSR::CSR(int32_t size) : size(size + 1) {
 }
 
 void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
+//    cout << "update" << endl;
     int32_t preVRowVal = IA[x];
     bool inserted = false;
     auto jit = JA.begin();
     auto vit = value.begin();
 
     for (int j = preVRowVal; j < IA[x + 1] - 1; ++j) {
+        if(j >= JA.size()){
+            JA.resize(j + 1, 0);
+            value.resize(j + 1, 0);
+        }
         if (JA.at(j) > y) {
+//            cout <<"if" << endl;
             JA.insert(jit + j, y);
             value.insert(vit + j, val);
             inserted = true;
             break;
         } else if (JA.at(j) == y) {
+//            cout << "else if" << endl;
             inserted = true;
             value.at(j) = val;
             break;
@@ -32,17 +39,26 @@ void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
 
     //Fall safe
     if (!inserted) {
-        JA.insert(jit + IA[x + 1] - 1, y);
-        value.insert(vit + IA[x + 1] - 1, val);
+//        cout << "fall safe" << endl;
+        if(JA.size() == 0) {
+            JA.push_back(y);
+            value.push_back(val);
+        }
+        else {
+            JA.insert(jit + IA[x + 1] - 1, y);
+            value.insert(vit + IA[x + 1] - 1, val);
+        }
     }
-
+//cout << "leaving update" << endl;
     //Mark (x, y) visited
-    csrTuple coordinate(x, y);
-    seenNodes[coordinate] = val;
+//    csrTuple coordinate(x, y);
+//    seenNodes[coordinate] = val;
 }
 
 int32_t CSR::get(int32_t x, int32_t y) {
+    if(x >= IA.size()) return 0;
     for (int i = IA[x]; i < IA[x + 1]; ++i) {
+        if(i >= JA.size()) return 0;
         if (JA[i] == y) return value[i];
     }
     return 0;
@@ -53,8 +69,9 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
     if(relaxMap.find(x) == relaxMap.end()) relaxMap[x] = set<int32_t>({y});
     else relaxMap[x].insert(y);
 
-    if (seenNodes.find(coordinate) == seenNodes.end()) {
+//    if (seenNodes.find(coordinate) == seenNodes.end()) {
 //        cout << x << " " << y << endl;
+    if(get(x, y) == 0){
         for (int i = x + 1; i <= size; ++i){
             ++IA[i];
         }

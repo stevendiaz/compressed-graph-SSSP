@@ -21,9 +21,7 @@ void DeltaStep::run(bool printLabels, bool printRelaxCount) {
         else {
             tempLight.insert(*vertex);
         }
-        //csr.setTent(vertex->at(0), INT_MAX);
     }
-    //csr.setTent(1, 0);
 
     Worklist worklist = Worklist(csr, delta);
     worklist.setLight(tempLight);

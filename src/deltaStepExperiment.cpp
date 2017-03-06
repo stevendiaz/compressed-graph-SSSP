@@ -11,7 +11,7 @@ int main(){
     int32_t increment = INT_MAX/5;
     for(int i = 0; i < 6; ++i){
         cout << "step = " << step + i * increment << endl;
-        DeltaStep deltaStep = DeltaStep(csr, step, 10);
+        DeltaStep deltaStep = DeltaStep(csr, i * increment, 10);
         deltaStep.run(true, true);
         cout << endl;
     }
