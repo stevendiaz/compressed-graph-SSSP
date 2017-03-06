@@ -8,6 +8,11 @@
 
 DeltaStep::DeltaStep(CSR csr, int32_t step, int seed) : csr(csr), delta(step), seed(seed) {}
 
+/* @param bool printLabels: flag for printing node labels
+ * @param bool printRelaxCount: flag for printing relaxations
+ * public method: 
+ *      runs the delta-step algorithm
+ */
 void DeltaStep::run(bool printLabels, bool printRelaxCount) {
     vector <vector<int32_t>> graph = csr.iterate();
     set<vector<int32_t>> tempLight;
@@ -21,9 +26,7 @@ void DeltaStep::run(bool printLabels, bool printRelaxCount) {
         else {
             tempLight.insert(*vertex);
         }
-        //csr.setTent(vertex->at(0), INT_MAX);
     }
-    //csr.setTent(1, 0);
 
     Worklist worklist = Worklist(csr, delta);
     worklist.setLight(tempLight);
