@@ -8,19 +8,21 @@
 # job will be charged as if all 16 cores were requested.
 #-----------------------------------------------------------------
 
-#SBATCH -J chaotic           	 # Job name
-#SBATCH -o ../output/chaotic.out    # Specify stdout output file (%j expands to jobId)
+#SBATCH -J deltaOptimal23           	 # Job name
+#SBATCH -o ../output/deltaOptimal23.out    # Specify stdout output file (%j expands to jobId)
 #SBATCH -p normal           	 # Queue name
 #SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
 #SBATCH -n 1                     # Total number of tasks
-#SBATCH -t 01:00:00              # Run time
+#SBATCH -t 13:00:00              # Run time
 
 # Load any necessary module
 module load gcc/4.9.3
 
 #Compile
 cd ../src
-make chaotic
+make deltaOptimal
 
 #Execute
-./chaotic.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat15.dimacs
+./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat23.dimacs
+
+make clean
