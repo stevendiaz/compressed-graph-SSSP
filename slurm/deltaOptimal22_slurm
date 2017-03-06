@@ -15,6 +15,7 @@
 #SBATCH -n 1                     # Total number of tasks
 #SBATCH -t 13:00:00              # Run time
 
+
 # Load any necessary module
 module load gcc/4.9.3
 
@@ -23,9 +24,7 @@ cd ../src
 make deltaOptimal
 
 #Execute
-#./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat20.dimacs > rmat20.txt
-#./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat20.dimacs > rmat22.txt
 ./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat22.dimacs
-#./deltaOptimal.o < /work/01131/rashid/class-inputs/road/road-FL > roadFL.txt
 
+#Clean
 make clean
