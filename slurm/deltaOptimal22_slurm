@@ -8,21 +8,24 @@
 # job will be charged as if all 16 cores were requested.
 #-----------------------------------------------------------------
 
-#SBATCH -J deltaOptimal           	 # Job name
-#SBATCH -o ../output/deltaOptimal.out    # Specify stdout output file (%j expands to jobId)
+#SBATCH -J deltaOptimal22           	 # Job name
+#SBATCH -o ../output/deltaOptimal22.out    # Specify stdout output file (%j expands to jobId)
 #SBATCH -p normal           	 # Queue name
 #SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
 #SBATCH -n 1                     # Total number of tasks
-#SBATCH -t 01:00:00              # Run time
+#SBATCH -t 13:00:00              # Run time
 
 # Load any necessary module
 module load gcc/4.9.3
 
 #Compile
+cd ../src
 make deltaOptimal
 
 #Execute
-./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat20.dimacs > rmat20.txt
-./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat20.dimacs > rmat22.txt
-./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat20.dimacs > rmat23.txt
-./deltaOptimal.o < /work/01131/rashid/class-inputs/road/road-FL > roadFL.txt
+#./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat20.dimacs > rmat20.txt
+#./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat20.dimacs > rmat22.txt
+./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat22.dimacs
+#./deltaOptimal.o < /work/01131/rashid/class-inputs/road/road-FL > roadFL.txt
+
+make clean

@@ -9,7 +9,7 @@
 #-----------------------------------------------------------------
 
 #SBATCH -J deltaOptimal15           	 # Job name
-#SBATCH -o ../output/deltaOptimal.out    # Specify stdout output file (%j expands to jobId)
+#SBATCH -o ../output/deltaOptimal15.out    # Specify stdout output file (%j expands to jobId)
 #SBATCH -p development           	 # Queue name
 #SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
 #SBATCH -n 1                     # Total number of tasks
@@ -19,6 +19,7 @@
 module load gcc/4.9.3
 
 #Compile
+cd ../src
 make deltaOptimal
 
 #Execute
@@ -26,3 +27,5 @@ make deltaOptimal
 #./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat20.dimacs > rmat22.txt
 #./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat20.dimacs > rmat23.txt
 #./deltaOptimal.o < /work/01131/rashid/class-inputs/road/road-FL > roadFL.txt
+
+make clean
