@@ -6,23 +6,20 @@ CSR::CSR(int32_t size) : size(size + 1) {
     value = vector<int32_t>();
     IA = vector<int32_t>(size + 1, 0);
     JA = vector<int32_t>();
-//    seenNodes = map < csrTuple, int32_t > ();
     nodeLabels = vector<long>(size, INT_MAX);
     relaxMap = map<int32_t, set<int32_t>>();
 }
 
 void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
 //    cout << "update" << endl;
-    int32_t preVRowVal = IA[x];
+    int32_t prevRowVal = IA[x];
+    int32_t currRowVal = IA[x + 1] - 1;
     bool inserted = false;
     auto jit = JA.begin();
     auto vit = value.begin();
 
-    for (int j = preVRowVal; j < IA[x + 1] - 1; ++j) {
-        if(j >= JA.size()){
-            JA.resize(j + 1, 0);
-            value.resize(j + 1, 0);
-        }
+    for (int j = prevRowVal; j < currRowVal; ++j) {
+//        cout << "oui" << endl;
         if (JA.at(j) > y) {
 //            cout <<"if" << endl;
             JA.insert(jit + j, y);
@@ -40,28 +37,33 @@ void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
     //Fall safe
     if (!inserted) {
 //        cout << "fall safe" << endl;
-        if(JA.size() == 0) {
-            JA.push_back(y);
-            value.push_back(val);
+//        cout << IA[x + 1] - 1 << ", " << JA.size() <<endl;
+        if(JA.size() <= currRowVal){
+            //Seg fault without this condition
+            //JA.size() at this point could be smaller than currRowval
+            //Prob because returning -1 in get when range invalid
+            JA.resize(currRowVal);
+            value.resize(currRowVal);
         }
-        else {
-            JA.insert(jit + IA[x + 1] - 1, y);
-            value.insert(vit + IA[x + 1] - 1, val);
-        }
+        JA.insert(jit + currRowVal, y);
+        value.insert(vit + currRowVal, val);
     }
+//    cout << "leaving update" << endl;
 }
 
 int32_t CSR::get(int32_t x, int32_t y) {
-    if(x >= IA.size()) return 0;
+    //Return -1 if invalid range -> shouldn't worry right now (this is probably not correct)
+    if(x >= IA.size()) return -1;
     for (int i = IA[x]; i < IA[x + 1]; ++i) {
-        if(i >= JA.size()) return 0;
+        //Invalid
+        if(i >= JA.size()) return -1;
         if (JA[i] == y) return value[i];
     }
+    //Never seen and valid range
     return 0;
 }
 
 void CSR::put(int32_t x, int32_t y, int32_t val) {
-    csrTuple coordinate(x, y);
     if(relaxMap.find(x) == relaxMap.end()) relaxMap[x] = set<int32_t>({y});
     else relaxMap[x].insert(y);
 
@@ -70,7 +72,7 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
             ++IA[i];
         }
         updateValue(x, y, val);
-    } else if (val > get(x, y)) updateValue(x, y, val);
+    } else if (val > get(x, y) && get(x, y) != -1) updateValue(x, y, val);
 }
 
 vector <vector<int32_t>> CSR::iterate() {
@@ -96,7 +98,6 @@ void CSR::printNodeLabels() {
     cout << "0 INF" << endl;
     for (size_t i = 1; i < nodeLabels.size(); ++i){
         cout << i << " ";
-        //if(IA[i+1] - IA[i-1] == 0) cout << 0 << endl;
         if (nodeLabels[i] == INT_MAX) cout << "INF" << endl;
         else cout << nodeLabels[i] << endl;
     }

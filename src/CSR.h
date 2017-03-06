@@ -19,7 +19,6 @@ private:
     vector<int32_t> value;
     vector<int32_t> IA;
     vector<int32_t> JA;
-    //map<csrTuple, int32_t> seenNodes;
     vector<long> nodeLabels;
     map<int32_t, set<int32_t>> relaxMap;
 
