@@ -6,7 +6,7 @@ CSR::CSR(int32_t size) : size(size + 1) {
     value = vector<int32_t>();
     IA = vector<int32_t>(size + 1, 0);
     JA = vector<int32_t>();
-    seenNodes = map < csrTuple, int32_t > ();
+//    seenNodes = map < csrTuple, int32_t > ();
     nodeLabels = vector<long>(size, INT_MAX);
     relaxMap = map<int32_t, set<int32_t>>();
 }
@@ -49,10 +49,6 @@ void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
             value.insert(vit + IA[x + 1] - 1, val);
         }
     }
-//cout << "leaving update" << endl;
-    //Mark (x, y) visited
-//    csrTuple coordinate(x, y);
-//    seenNodes[coordinate] = val;
 }
 
 int32_t CSR::get(int32_t x, int32_t y) {
@@ -69,8 +65,6 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
     if(relaxMap.find(x) == relaxMap.end()) relaxMap[x] = set<int32_t>({y});
     else relaxMap[x].insert(y);
 
-//    if (seenNodes.find(coordinate) == seenNodes.end()) {
-//        cout << x << " " << y << endl;
     if(get(x, y) == 0){
         for (int i = x + 1; i <= size; ++i){
             ++IA[i];
