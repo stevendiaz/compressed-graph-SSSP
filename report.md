@@ -49,12 +49,11 @@ return row;
 
 ## Dijkstra's Algorithm
 
-#### Experiment
-| Seed | Edge Relaxations | Node Relaxations | Total relaxations |
+#### Experiment - rmat15 & roadNY on dijkstras (delta = 1)
+| Graph | Edge Relaxations | Node Relaxations | Total relaxations |
 |------|------------------|------------------|-------------------|
-| 0    | 0                | 0                |                   |
-| 20   | 0                | 0                |                   |
-| 40   | 0                | 0                |                   |
+|rmat15| 176678           | 2498             |  179176           |
+|roadNY| 0                | 0                |                   |
 
 ## Delta Step
 #### Experiment - Number of relations with changing delta
@@ -74,7 +73,7 @@ From the previous experiment, the optimal value for delta is ```VALUE```
 
 | Graph    | Number of nodes | Relaxations |
 |----------|-----------------|-------------|
-| rmat15   | 0               |             |
+| rmat15   | 32768           | 179176      |
 | rmat20   | 0               |             |
 | rmat22   | 0               |             |
 | road-FLA | 0               |             |
