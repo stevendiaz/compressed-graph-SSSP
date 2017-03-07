@@ -62,7 +62,7 @@ void Worklist::relax(int32_t w, long d) {
 
 void Worklist::relaxNodes(set<csrTuple> req, int seed) {
     vector<csrTuple> reqVector(req.begin(), req.end());
-    shuffle(reqVector.begin(), reqVector.end(), default_random_engine(seed));
+    random_shuffle(reqVector.begin(), reqVector.end());
 
     for (auto it = reqVector.begin(); it != reqVector.end(); ++it) {
         relax(it->first, it->second);
