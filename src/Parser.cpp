@@ -10,8 +10,6 @@ CSR Parser::parseInput(){
     int32_t size, edges, x, y, val;
     cin >> s >> s >> size >> edges;
 
-//    cout << "size = " << size << ", edges = " << edges << endl;
-
     //Construct CSR as we read the file
     CSR csr = CSR(size);
     for(int i = 0; i < edges; ++i){

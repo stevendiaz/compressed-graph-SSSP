@@ -27,16 +27,16 @@ void CSR::update(int32_t x, int end){
         //Update CSR arrays
         IA.push_back(NNZ);
 
-        //Update largest out-degree and node with largest out-degree
-        if (currOutDegree > largestOutDegree) {
-            largestOutDegree = currOutDegree;
-            currOutDegree = 0;
-            outDegreeNode = currSrc;
-        }
-
         //update current source node
         ++currSrc;
         ++x;
+    }
+
+    //Update largest out-degree and node with largest out-degree
+    if (currOutDegree > largestOutDegree) {
+        largestOutDegree = currOutDegree;
+        currOutDegree = 0;
+        outDegreeNode = currSrc;
     }
 }
 
@@ -44,13 +44,13 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
     if(relaxMap.find(x) == relaxMap.end()) relaxMap[x] = set<int32_t>({y});
     else relaxMap[x].insert(y);
 
-    //Update all 0-outDegree nodes from current source to x
+    //Skip all 0-outDegree nodes from current source and update current source node
     if(currSrc < x) {
         update(currSrc + 1, x);
         seenNodes = vector<int32_t>(size, -1);
         tempJA = vector<int32_t>();
     }
-    
+
     if(seenNodes[y] == -1){
         ++NNZ;
         tempJA.push_back(y);
@@ -63,41 +63,22 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
 
 vector <vector<int32_t>> CSR::iterate() {
     vector <vector<int32_t>> result;
-    int32_t currentColIndex = 0;
+
     for (size_t i = 1; i < IA.size(); ++i) {
-        for(int j = 0; j < IA[i] - IA[i-1]; ++j) {
-            int32_t rowVal = i;
-            int32_t colVal = JA[currentColIndex];
-            int32_t realVal = value[currentColIndex];
+        int32_t currentRowIndex = 0;
+
+        while (currentRowIndex < IA[i] - IA[i - 1]) {
+            int32_t rowVal = i - 1;
+            int32_t colVal = JA[IA[i - 1] + currentRowIndex];
+            int32_t realVal = value[IA[i - 1] + currentRowIndex];
 
             vector <int32_t> pairing{rowVal, colVal, realVal};
             result.push_back(pairing);
-            ++currentColIndex;
+            ++currentRowIndex;
         }
     }
-
     return result;
 }
-
-//
-//vector <vector<int32_t>> CSR::iterate() {
-//    vector <vector<int32_t>> result;
-//
-//    for (size_t i = 1; i < IA.size(); ++i) {
-//        int32_t currentRowIndex = 0;
-//
-//        while (currentRowIndex < IA[i] - IA[i - 1]) {
-//            int32_t rowVal = i;
-//            int32_t colVal = JA[IA[i - 1] + currentRowIndex];
-//            int32_t realVal = value[IA[i - 1] + currentRowIndex];
-//
-//            vector <int32_t> pairing{rowVal, colVal, realVal};
-//            result.push_back(pairing);
-//            ++currentRowIndex;
-//        }
-//    }
-//    return result;
-//}
 
 void CSR::printNodeLabels() {
     cout << "0 INF" << endl;
@@ -122,16 +103,16 @@ void CSR::setTent(int32_t u, long val) {
 }
 
 void CSR::debugInfo() {
-//    cout << "value: " << value.size() << endl;
-//    for(auto it = value.begin(); it != value.end(); ++it)
-//        cout << *it << " ";
-//    cout << endl;
-//
-//    cout << "IA: " << IA.size() << endl;
-//    for(auto it = IA.begin(); it != IA.end(); ++it)
-//        cout << *it << " ";
-//    cout << endl;
-//
+    cout << "value: " << value.size() << endl;
+    for(auto it = value.begin(); it != value.end(); ++it)
+        cout << *it << " ";
+    cout << endl;
+
+    cout << "IA: " << IA.size() << endl;
+    for(auto it = IA.begin(); it != IA.end(); ++it)
+        cout << *it << " ";
+    cout << endl;
+
     cout << "JA: " << JA.size() << endl;
     for(auto it = JA.begin(); it != JA.end(); ++it)
         cout << *it << " ";
