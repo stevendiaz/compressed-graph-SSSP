@@ -4,20 +4,29 @@
 CSR::CSR(int32_t size) : size(size + 1) {
     size += 1;
     value = vector<int32_t>();
-    IA = vector<int32_t>(size + 1, 0);
+    IA = vector<int32_t>(size + 2, 0);
     JA = vector<int32_t>();
-    seenNodes = map < csrTuple, int32_t > ();
+    seenNodes = vector<int32_t>(size + 1, 0);
+    currSrc = 1;
     nodeLabels = vector<long>(size, INT_MAX);
     relaxMap = map<int32_t, set<int32_t>>();
 }
 
 void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
-    int32_t preVRowVal = IA[x];
+    int32_t prevRowVal = IA[x];
+    int32_t currRowVal = IA[x + 1] - 1;
     bool inserted = false;
     auto jit = JA.begin();
     auto vit = value.begin();
 
-    for (int j = preVRowVal; j < IA[x + 1] - 1; ++j) {
+    for (int j = prevRowVal; j < currRowVal; ++j) {
+        try{
+            int v = JA.at(j);
+        } catch(...){
+            cout << prevRowVal << " " << currRowVal << ", j = " << j << endl;
+            cout << "JA.size()  = " << JA.size() << endl;
+            debugInfo();
+        }
         if (JA.at(j) > y) {
             JA.insert(jit + j, y);
             value.insert(vit + j, val);
@@ -32,13 +41,11 @@ void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
 
     //Fall safe
     if (!inserted) {
-        JA.insert(jit + IA[x + 1] - 1, y);
-        value.insert(vit + IA[x + 1] - 1, val);
+        JA.insert(jit + currRowVal, y);
+        value.insert(vit + currRowVal, val);
     }
 
-    //Mark (x, y) visited
-    csrTuple coordinate(x, y);
-    seenNodes[coordinate] = val;
+    seenNodes[y] = val;
 }
 
 int32_t CSR::get(int32_t x, int32_t y) {
@@ -49,17 +56,21 @@ int32_t CSR::get(int32_t x, int32_t y) {
 }
 
 void CSR::put(int32_t x, int32_t y, int32_t val) {
-    csrTuple coordinate(x, y);
     if(relaxMap.find(x) == relaxMap.end()) relaxMap[x] = set<int32_t>({y});
     else relaxMap[x].insert(y);
 
-    if (seenNodes.find(coordinate) == seenNodes.end()) {
-//        cout << x << " " << y << endl;
+    if(x > currSrc){
+        currSrc = x;
+        seenNodes = vector<int32_t>(size + 1);
+    }
+
+    if (seenNodes[y] == 0) {
         for (int i = x + 1; i <= size; ++i){
+//        cout << x << " " << y << endl;
             ++IA[i];
         }
         updateValue(x, y, val);
-    } else if (val > get(x, y)) updateValue(x, y, val);
+    } else if (val > seenNodes[y]) updateValue(x, y, val);
 }
 
 vector <vector<int32_t>> CSR::iterate() {
@@ -85,7 +96,6 @@ void CSR::printNodeLabels() {
     cout << "0 INF" << endl;
     for (size_t i = 1; i < nodeLabels.size(); ++i){
         cout << i << " ";
-        //if(IA[i+1] - IA[i-1] == 0) cout << 0 << endl;
         if (nodeLabels[i] == INT_MAX) cout << "INF" << endl;
         else cout << nodeLabels[i] << endl;
     }
