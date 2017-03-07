@@ -4,7 +4,7 @@
 CSR::CSR(int32_t size) : size(size + 1), currSrc(1), NNZ(0), outDegreeNode(0), largestOutDegree(0), currOutDegree(0) {
     size += 1;
     value = vector<int32_t>();
-    IA = vector<int32_t>(size, 0);
+    IA = vector<int32_t>({0});
     JA = vector<int32_t>();
     currSrc = 1;
     seenNodes = vector<int32_t > (size, -1);
@@ -15,10 +15,9 @@ CSR::CSR(int32_t size) : size(size + 1), currSrc(1), NNZ(0), outDegreeNode(0), l
 
 void CSR::update(int32_t x){
     //Update CSR arrays
-    IA.at(x - 1) = NNZ + IA.at(x - 2);
-//    cout << "NNZ =  "<< NNZ << endl;
+    IA.push_back(NNZ);
+    cout << "NNZ at " << x << " is " << NNZ << endl;
 
-    NNZ = 0;
     sort(tempJA.begin(), tempJA.end());
     JA.insert(JA.end(), tempJA.begin(), tempJA.end());
 
@@ -33,16 +32,16 @@ void CSR::update(int32_t x){
     }
 
     //update current source node
-    currSrc = x;
+    ++currSrc;
 //    debugInfo();
 }
 
 void CSR::put(int32_t x, int32_t y, int32_t val) {
     if(relaxMap.find(x) == relaxMap.end()) relaxMap[x] = set<int32_t>({y});
     else relaxMap[x].insert(y);
-    
-    if(currSrc < x){
-        update(x);
+
+    while(currSrc < x) {
+        update(currSrc + 1);
         seenNodes = vector<int32_t>(size, -1);
         tempJA = vector<int32_t>();
     }

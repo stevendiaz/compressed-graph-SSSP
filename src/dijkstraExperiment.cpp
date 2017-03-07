@@ -9,7 +9,7 @@ int main(){
 
     clock_t t = clock();
 	CSR csr = p.parseInput();
-    csr.debugInfo();
+//    csr.debugInfo();
 //    DeltaStep deltaStep = DeltaStep(csr, 1, 10);
 //    deltaStep.run(true, true);
 
