@@ -23,10 +23,12 @@ private:
     vector<int32_t> seenNodes;
     int32_t currSrc;
     int32_t NNZ;
+    int32_t outDegreeNode;
+    int32_t largestOutDegree;
+    int32_t currOutDegree;
     vector<long> nodeLabels;
     vector<int32_t> tempJA;
     map<int32_t, set<int32_t>> relaxMap;
-    void updateValue(int32_t x, int32_t y, int32_t val);
 
 public:
     CSR (int32_t size);
@@ -35,7 +37,7 @@ public:
     void put(int32_t x, int32_t y, int32_t val);
     vector<vector<int32_t>> iterate();
     void printNodeLabels();
-    int32_t getLargestOutDegree();
+    int32_t getOutDegreeNode();
     long getTent(int32_t u);
     void setTent(int32_t u, long val);
     void debugInfo();

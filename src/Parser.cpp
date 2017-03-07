@@ -20,7 +20,8 @@ CSR Parser::parseInput(){
             csr.put(x, y, val);
         }
     }
-    csr.update(x);
+    cout << "after for: x = " << x << ", y = " << y << endl;
+    csr.update(++x);
 
     return csr;
 }

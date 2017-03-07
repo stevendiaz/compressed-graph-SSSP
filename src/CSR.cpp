@@ -1,66 +1,40 @@
 #include "CSR.h"
 
 /* CSRImpl Class Methods */
-CSR::CSR(int32_t size) : size(size + 1), currSrc(1), NNZ(0) {
+CSR::CSR(int32_t size) : size(size + 1), currSrc(1), NNZ(0), outDegreeNode(0), largestOutDegree(0), currOutDegree(0) {
     size += 1;
     value = vector<int32_t>();
-    IA = vector<int32_t>(size + 2, 0);
+    IA = vector<int32_t>(size, 0);
     JA = vector<int32_t>();
-    seenNodes = vector<int32_t>(size + 1, 0);
     currSrc = 1;
-    IA = vector<int32_t>({0, 0});
-    JA = vector<int32_t>();
-    seenNodes = vector<int32_t > (size + 2, -1);
+    seenNodes = vector<int32_t > (size, -1);
     nodeLabels = vector<long>(size, INT_MAX);
     relaxMap = map<int32_t, set<int32_t>>();
     tempJA = vector<int32_t>();
 }
 
-// void CSR::updateValue(int32_t x, int32_t y, int32_t val) {
-//     int32_t preVRowVal = IA[x];
-//     bool inserted = false;
-//     auto jit = JA.begin();
-//     auto vit = value.begin();
-
-//     for (int j = preVRowVal; j < IA[x + 1] - 1; ++j) {
-//         if (JA.at(j) > y) {
-//             JA.insert(jit + j, y);
-//             value.insert(vit + j, val);
-//             inserted = true;
-//             break;
-//         } else if (JA.at(j) == y) {
-//             inserted = true;
-//             value.at(j) = val;
-//             break;
-//         }
-//     }
-
-//     //Fall safe
-//     if (!inserted) {
-//         JA.insert(jit + IA[x + 1] - 1, y);
-//         value.insert(vit + IA[x + 1] - 1, val);
-//     }
-
-//     //Mark (x, y) visited
-//     csrTuple coordinate(x, y);
-//     seenNodes[coordinate] = val;
-// }
-
-// int32_t CSR::get(int32_t x, int32_t y) {
-//     for (int i = IA[x]; i < IA[x + 1]; ++i) {
-//         if (JA[i] == y) return value[i];
-//     }
-//     return 0;
-// // }
-
 void CSR::update(int32_t x){
-    IA.push_back(NNZ);
-    currSrc = x;
+    //Update CSR arrays
+    IA.at(x - 1) = NNZ + IA.at(x - 2);
+    cout << "NNZ =  "<< NNZ << endl;
+
+    NNZ = 0;
     sort(tempJA.begin(), tempJA.end());
     JA.insert(JA.end(), tempJA.begin(), tempJA.end());
 
     for(auto it = tempJA.begin(); it != tempJA.end(); ++it)
         value.push_back(seenNodes[*it]);
+
+    //Update largest out-degree and node with largest out-degree
+    if(currOutDegree > largestOutDegree){
+        largestOutDegree = currOutDegree;
+        currOutDegree = 0;
+        outDegreeNode = currSrc;
+    }
+
+    //update current source node
+    currSrc = x;
+    debugInfo();
 }
 
 void CSR::put(int32_t x, int32_t y, int32_t val) {
@@ -69,9 +43,8 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
     
     if(currSrc < x){
         update(x);
-        seenNodes = vector<int32_t>(size + 2, -1);
+        seenNodes = vector<int32_t>(size, -1);
         tempJA = vector<int32_t>();
-        debugInfo();
     }
 
     cout << "x = " << x << ", y = " << y << endl;
@@ -80,9 +53,9 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
         ++NNZ;
         tempJA.push_back(y);
         seenNodes[y] = val;
+        ++currOutDegree;
     } else {
-        if(seenNodes[y] < val)
-        value.at(y) = val;
+        if(seenNodes[y] < val) value.at(y) = val;
     }
 }
 
@@ -115,6 +88,10 @@ void CSR::printNodeLabels() {
 
 }
 
+int32_t CSR::getOutDegreeNode() {
+    return outDegreeNode;
+}
+
 long CSR::getTent(int32_t u) {
     return nodeLabels[u];
 }
@@ -138,20 +115,6 @@ void CSR::debugInfo() {
     for(auto it = JA.begin(); it != JA.end(); ++it)
         cout << *it << " ";
     cout << endl;
-}
-
-int32_t CSR::getLargestOutDegree() {
-   int32_t oldDegree = -1;
-   int32_t row = -1;
-
-   for (int i = 0; i < size; ++i) {
-       int32_t currDegree = IA[i + 1] - IA[i];
-       if (currDegree > oldDegree) {
-           row = i;
-           oldDegree = currDegree;
-       }
-   }
-   return row;
 }
 
 bool CSR::nodeFullyRelaxed(int32_t node){

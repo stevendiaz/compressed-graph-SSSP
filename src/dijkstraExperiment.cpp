@@ -6,7 +6,7 @@
 int main(){
     Parser p = Parser ();
 	CSR csr = p.parseInput();
-    csr.debugInfo();
+//    csr.debugInfo();
     DeltaStep deltaStep = DeltaStep(csr, 1, 10);
     deltaStep.run(true, true);
 
