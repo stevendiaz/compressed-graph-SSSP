@@ -61,18 +61,18 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
 
 vector <vector<int32_t>> CSR::iterate() {
     vector <vector<int32_t>> result;
-
+    int32_t currentColIndex = 0;
     for (size_t i = 1; i < IA.size(); ++i) {
-        int32_t currentRowIndex = 0;
-
-        while (currentRowIndex < IA[i] - IA[i - 1]) {
+        for(int j = 0; j < IA[i] - IA[i-1]; ++j) {
             int32_t rowVal = i;
-            int32_t colVal = JA[IA[i - 1] + currentRowIndex];
-            int32_t realVal = value[IA[i - 1] + currentRowIndex];
+            int32_t colVal = JA[currentColIndex];
+            int32_t realVal = value[currentColIndex];
 
             vector <int32_t> pairing{rowVal, colVal, realVal};
             result.push_back(pairing);
-            ++currentRowIndex;
+            ++currentColIndex;
+        }
+    }
 
     return result;
 }
@@ -120,20 +120,20 @@ void CSR::setTent(int32_t u, long val) {
 }
 
 void CSR::debugInfo() {
-    cout << "value: ";
-    for(auto it = value.begin(); it != value.end(); ++it)
-        cout << *it << " ";
-    cout << endl;
-
-    cout << "IA: ";
+//    cout << "value: " << value.size();
+//    for(auto it = value.begin(); it != value.end(); ++it)
+//        cout << *it << " ";
+//    cout << endl;
+//
+    cout << "IA: " << IA.size() << endl;
     for(auto it = IA.begin(); it != IA.end(); ++it)
         cout << *it << " ";
     cout << endl;
-
-    cout << "JA: ";
-    for(auto it = JA.begin(); it != JA.end(); ++it)
-        cout << *it << " ";
-    cout << endl;
+//
+//    cout << "JA: " << JA.size() << endl;
+//    for(auto it = JA.begin(); it != JA.end(); ++it)
+//        cout << *it << " ";
+//    cout << endl;
 }
 
 bool CSR::nodeFullyRelaxed(int32_t node){
