@@ -14,16 +14,18 @@ CSR::CSR(int32_t size) : size(size + 1), currSrc(1), NNZ(0), outDegreeNode(0), l
 }
 
 void CSR::update(int32_t x, int end){
+    //Update JA
+    sort(tempJA.begin(), tempJA.end());
+    JA.insert(JA.end(), tempJA.begin(), tempJA.end());
+
+    //Update Value
+    for (auto it = tempJA.begin(); it != tempJA.end(); ++it)
+        value.push_back(seenNodes[*it]);
+
+    //Update IA
     while(x <= end) {
         //Update CSR arrays
         IA.push_back(NNZ);
-//        cout << "NNZ at " << x << " is " << NNZ << endl;
-
-        sort(tempJA.begin(), tempJA.end());
-        JA.insert(JA.end(), tempJA.begin(), tempJA.end());
-
-        for (auto it = tempJA.begin(); it != tempJA.end(); ++it)
-            value.push_back(seenNodes[*it]);
 
         //Update largest out-degree and node with largest out-degree
         if (currOutDegree > largestOutDegree) {
@@ -42,13 +44,12 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
     if(relaxMap.find(x) == relaxMap.end()) relaxMap[x] = set<int32_t>({y});
     else relaxMap[x].insert(y);
 
+    //Update all 0-outDegree nodes from current source to x
     if(currSrc < x) {
         update(currSrc + 1, x);
         seenNodes = vector<int32_t>(size, -1);
         tempJA = vector<int32_t>();
     }
-
-//    cout << "x = " << x << ", y = " << y << endl;
     
     if(seenNodes[y] == -1){
         ++NNZ;
@@ -121,20 +122,20 @@ void CSR::setTent(int32_t u, long val) {
 }
 
 void CSR::debugInfo() {
-//    cout << "value: " << value.size();
+//    cout << "value: " << value.size() << endl;
 //    for(auto it = value.begin(); it != value.end(); ++it)
 //        cout << *it << " ";
 //    cout << endl;
 //
-    cout << "IA: " << IA.size() << endl;
-    for(auto it = IA.begin(); it != IA.end(); ++it)
-        cout << *it << " ";
-    cout << endl;
-//
-//    cout << "JA: " << JA.size() << endl;
-//    for(auto it = JA.begin(); it != JA.end(); ++it)
+//    cout << "IA: " << IA.size() << endl;
+//    for(auto it = IA.begin(); it != IA.end(); ++it)
 //        cout << *it << " ";
 //    cout << endl;
+//
+    cout << "JA: " << JA.size() << endl;
+    for(auto it = JA.begin(); it != JA.end(); ++it)
+        cout << *it << " ";
+    cout << endl;
 }
 
 bool CSR::nodeFullyRelaxed(int32_t node){
