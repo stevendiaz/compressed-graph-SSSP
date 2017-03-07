@@ -10,6 +10,13 @@ DeltaStep::DeltaStep(CSR csr, int32_t step, int seed) : csr(csr), delta(step), s
 
 void DeltaStep::run(bool printLabels, bool printRelaxCount) {
     vector <vector<int32_t>> graph = csr.iterate();
+//
+//    for(auto i = graph.begin(); i != graph.end(); ++i){
+//        for(auto it = i->begin(); it != i->end(); ++it)
+//            cout << *it << " ";
+//        cout << endl;
+//    }
+
     set<vector<int32_t>> tempLight;
     set<vector<int32_t>> tempHeavy;
 

@@ -16,7 +16,7 @@ CSR::CSR(int32_t size) : size(size + 1), currSrc(1), NNZ(0), outDegreeNode(0), l
 void CSR::update(int32_t x){
     //Update CSR arrays
     IA.at(x - 1) = NNZ + IA.at(x - 2);
-    cout << "NNZ =  "<< NNZ << endl;
+//    cout << "NNZ =  "<< NNZ << endl;
 
     NNZ = 0;
     sort(tempJA.begin(), tempJA.end());
@@ -34,7 +34,7 @@ void CSR::update(int32_t x){
 
     //update current source node
     currSrc = x;
-    debugInfo();
+//    debugInfo();
 }
 
 void CSR::put(int32_t x, int32_t y, int32_t val) {
@@ -47,7 +47,7 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
         tempJA = vector<int32_t>();
     }
 
-    cout << "x = " << x << ", y = " << y << endl;
+//    cout << "x = " << x << ", y = " << y << endl;
     
     if(seenNodes[y] == -1){
         ++NNZ;
@@ -55,7 +55,7 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
         seenNodes[y] = val;
         ++currOutDegree;
     } else {
-        if(seenNodes[y] < val) value.at(y) = val;
+        if(seenNodes[y] < val) seenNodes[y] = val;
     }
 }
 
@@ -66,7 +66,7 @@ vector <vector<int32_t>> CSR::iterate() {
         int32_t currentRowIndex = 0;
 
         while (currentRowIndex < IA.at(i) - IA.at(i - 1)) {
-            int32_t rowVal = i - 1;
+            int32_t rowVal = i;
             int32_t colVal = JA.at(IA.at(i - 1) + currentRowIndex);
             int32_t realVal = value.at(IA.at(i - 1) + currentRowIndex);
 
