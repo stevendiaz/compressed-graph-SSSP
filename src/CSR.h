@@ -43,7 +43,7 @@ public:
     void debugInfo();
     bool nodeFullyRelaxed(int32_t node);
     void relaxNode(int32_t src, int32_t dest);
-    void update(int32_t x);
+    void update(int32_t x, int32_t end);
 };
 
 #endif

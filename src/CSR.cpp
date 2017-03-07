@@ -4,7 +4,7 @@
 CSR::CSR(int32_t size) : size(size + 1), currSrc(1), NNZ(0), outDegreeNode(0), largestOutDegree(0), currOutDegree(0) {
     size += 1;
     value = vector<int32_t>();
-    IA = vector<int32_t>({0});
+    IA = vector<int32_t>({0, 0});
     JA = vector<int32_t>();
     currSrc = 1;
     seenNodes = vector<int32_t > (size, -1);
@@ -13,27 +13,29 @@ CSR::CSR(int32_t size) : size(size + 1), currSrc(1), NNZ(0), outDegreeNode(0), l
     tempJA = vector<int32_t>();
 }
 
-void CSR::update(int32_t x){
-    //Update CSR arrays
-    IA.push_back(NNZ);
-    cout << "NNZ at " << x << " is " << NNZ << endl;
+void CSR::update(int32_t x, int end){
+    while(x <= end) {
+        //Update CSR arrays
+        IA.push_back(NNZ);
+//        cout << "NNZ at " << x << " is " << NNZ << endl;
 
-    sort(tempJA.begin(), tempJA.end());
-    JA.insert(JA.end(), tempJA.begin(), tempJA.end());
+        sort(tempJA.begin(), tempJA.end());
+        JA.insert(JA.end(), tempJA.begin(), tempJA.end());
 
-    for(auto it = tempJA.begin(); it != tempJA.end(); ++it)
-        value.push_back(seenNodes[*it]);
+        for (auto it = tempJA.begin(); it != tempJA.end(); ++it)
+            value.push_back(seenNodes[*it]);
 
-    //Update largest out-degree and node with largest out-degree
-    if(currOutDegree > largestOutDegree){
-        largestOutDegree = currOutDegree;
-        currOutDegree = 0;
-        outDegreeNode = currSrc;
+        //Update largest out-degree and node with largest out-degree
+        if (currOutDegree > largestOutDegree) {
+            largestOutDegree = currOutDegree;
+            currOutDegree = 0;
+            outDegreeNode = currSrc;
+        }
+
+        //update current source node
+        ++currSrc;
+        ++x;
     }
-
-    //update current source node
-    ++currSrc;
-//    debugInfo();
 }
 
 void CSR::put(int32_t x, int32_t y, int32_t val) {
@@ -41,7 +43,7 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
     else relaxMap[x].insert(y);
 
     while(currSrc < x) {
-        update(currSrc + 1);
+        update(currSrc + 1, currSrc + 1);
         seenNodes = vector<int32_t>(size, -1);
         tempJA = vector<int32_t>();
     }

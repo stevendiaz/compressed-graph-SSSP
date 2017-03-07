@@ -20,7 +20,7 @@ CSR Parser::parseInput(){
             csr.put(x, y, val);
         }
     }
-    csr.update(++x);
+    csr.update(++x, size + 1);
 
     return csr;
 }
