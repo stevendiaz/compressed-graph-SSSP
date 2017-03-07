@@ -5,6 +5,7 @@
 #include <map>
 #include <set>
 #include <iostream>
+#include <algorithm>
 
 #ifndef CSR_h
 #define CSR_h
@@ -19,11 +20,13 @@ private:
     vector<int32_t> value;
     vector<int32_t> IA;
     vector<int32_t> JA;
-    map<csrTuple, int32_t> seenNodes;
+    vector<int32_t> seenNodes;
+    int32_t currSrc;
+    int32_t NNZ;
     vector<long> nodeLabels;
+    // vector<vector<int32_t> > mtx;
+    vector<int32_t> tempJA;
     map<int32_t, set<int32_t>> relaxMap;
-
-
     void updateValue(int32_t x, int32_t y, int32_t val);
 
 public:
@@ -39,6 +42,7 @@ public:
     void debugInfo();
     bool nodeFullyRelaxed(int32_t node);
     void relaxNode(int32_t src, int32_t dest);
+    void update(int32_t x);
 };
 
 #endif
