@@ -24,7 +24,7 @@ void DeltaStep::run(bool printLabels, bool printRelaxCount) {
         }
     }
 
-    Worklist worklist = Worklist(csr, delta);
+    Worklist worklist = Worklist(csr, delta, seed);
     worklist.setLight(tempLight);
     worklist.setHeavy(tempHeavy);
     worklist.relax(1, 0);
