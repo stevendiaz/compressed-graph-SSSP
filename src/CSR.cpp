@@ -42,8 +42,8 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
     if(relaxMap.find(x) == relaxMap.end()) relaxMap[x] = set<int32_t>({y});
     else relaxMap[x].insert(y);
 
-    while(currSrc < x) {
-        update(currSrc + 1, currSrc + 1);
+    if(currSrc < x) {
+        update(currSrc + 1, x);
         seenNodes = vector<int32_t>(size, -1);
         tempJA = vector<int32_t>();
     }
