@@ -10,10 +10,10 @@
 
 #SBATCH -J deltaOptimal20           	 # Job name
 #SBATCH -o ../output/deltaOptimal20.out    # Specify stdout output file (%j expands to jobId)
-#SBATCH -p normal           	 # Queue name
+#SBATCH -p serial           	 # Queue name
 #SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
 #SBATCH -n 1                     # Total number of tasks
-#SBATCH -t 13:00:00              # Run time
+#SBATCH -t 02:00:00              # Run time
 
 # Load any necessary module
 module load gcc/4.9.3
@@ -25,4 +25,5 @@ make deltaOptimal
 #Execute
 ./deltaOptimal.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat20.dimacs
 
+#Clean
 make clean
