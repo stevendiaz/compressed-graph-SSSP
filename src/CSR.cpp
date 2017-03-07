@@ -65,18 +65,37 @@ vector <vector<int32_t>> CSR::iterate() {
     for (size_t i = 1; i < IA.size(); ++i) {
         int32_t currentRowIndex = 0;
 
-        while (currentRowIndex < IA.at(i) - IA.at(i - 1)) {
+        while (currentRowIndex < IA[i] - IA[i - 1]) {
             int32_t rowVal = i;
-            int32_t colVal = JA.at(IA.at(i - 1) + currentRowIndex);
-            int32_t realVal = value.at(IA.at(i - 1) + currentRowIndex);
+            int32_t colVal = JA[IA[i - 1] + currentRowIndex];
+            int32_t realVal = value[IA[i - 1] + currentRowIndex];
 
             vector <int32_t> pairing{rowVal, colVal, realVal};
             result.push_back(pairing);
             ++currentRowIndex;
-        }
-    }
+
     return result;
 }
+
+//
+//vector <vector<int32_t>> CSR::iterate() {
+//    vector <vector<int32_t>> result;
+//
+//    for (size_t i = 1; i < IA.size(); ++i) {
+//        int32_t currentRowIndex = 0;
+//
+//        while (currentRowIndex < IA[i] - IA[i - 1]) {
+//            int32_t rowVal = i;
+//            int32_t colVal = JA[IA[i - 1] + currentRowIndex];
+//            int32_t realVal = value[IA[i - 1] + currentRowIndex];
+//
+//            vector <int32_t> pairing{rowVal, colVal, realVal};
+//            result.push_back(pairing);
+//            ++currentRowIndex;
+//        }
+//    }
+//    return result;
+//}
 
 void CSR::printNodeLabels() {
     cout << "0 INF" << endl;
