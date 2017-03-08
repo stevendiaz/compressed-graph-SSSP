@@ -1,7 +1,7 @@
 #include "CSR.h"
 
 /* CSRImpl Class Methods */
-CSR::CSR(int32_t size) : size(size + 1), currSrc(1), NNZ(0), outDegreeNode(0), largestOutDegree(0), currOutDegree(0) {
+CSR::CSR(int32_t size, int32_t numEdges) : size(size + 1), numEdges(numEdges), currSrc(1), NNZ(0), outDegreeNode(0), largestOutDegree(0), currOutDegree(0) {
     size += 1;
     value = vector<int32_t>();
     IA = vector<int32_t>({0, 0});
@@ -126,4 +126,16 @@ bool CSR::nodeFullyRelaxed(int32_t node){
 void CSR::relaxNode(int32_t src, int32_t dest){
     if(relaxMap[src].find(dest) != relaxMap[src].end())
         relaxMap[src].erase(dest);
+}
+
+void CSR::to_dimacs() {
+    cout << "p sp " << size - 1 << " " <<  numEdges << endl;
+
+    vector<vector<int32_t> > edges = iterate();
+    for(auto it = edges.begin(); it != edges.end(); ++it) {
+        int32_t u = it->at(0);
+        int32_t v = it->at(1);
+        int32_t w = it->at(2);
+        cout << "a " << u << " " << v << " " << w << endl;
+    }
 }
