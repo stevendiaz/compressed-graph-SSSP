@@ -7,8 +7,8 @@
 
 
 int main(){
-    Parser p = Parser(1);
-	CSR csr = p.parseInput();
+    Parser p = Parser(316607);
+    CSR csr = p.parseInput();
 
     clock_t t;
     DeltaStep deltaStep(csr, 1, 10);

@@ -18,6 +18,7 @@ class CSR {
 private:
     int32_t size;
     int32_t numEdges;
+    int32_t src;
     vector<int32_t> value;
     vector<int32_t> IA;
     vector<int32_t> JA;
@@ -29,9 +30,7 @@ private:
     map<int32_t, set<int32_t>> relaxMap;
 
 public:
-    CSR (int32_t size, int32_t edge);
-
-    int32_t get(int32_t x, int32_t y);
+    CSR (int32_t size, int32_t edge, int32_t source);
     void put(int32_t x, int32_t y, int32_t val);
     vector<vector<int32_t>> iterate();
     void printNodeLabels();

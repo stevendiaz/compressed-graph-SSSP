@@ -4,9 +4,10 @@
 
 /* @param int32_t size: Number of nodes, represents a size*size matrix
  * @param int32_t edges: Number of edges
+ * @param int32_t src: Source node of graph
  * @return CSR : an empty compressed sparse row object
  */
-CSR::CSR(int32_t size, int32_t numEdges) : size(size + 1), numEdges(numEdges), currSrc(1), NNZ(0) {
+CSR::CSR(int32_t size, int32_t numEdges, int32_t src) : size(size + 1), numEdges(numEdges), src(src - 1), currSrc(1), NNZ(0) {
     size += 1;
     value = vector<int32_t>();
     IA = vector<int32_t>({0, 0});
@@ -51,6 +52,8 @@ void CSR::update(int32_t x, int end){
  *      sets the weight of edge x to y to val
  */
 void CSR::put(int32_t x, int32_t y, int32_t val) {
+    x -= src;
+    y -= src;
     if(relaxMap.find(x) == relaxMap.end()) relaxMap[x] = set<int32_t>({y});
     else relaxMap[x].insert(y);
 
@@ -82,8 +85,8 @@ vector <vector<int32_t>> CSR::iterate() {
         int32_t currentRowIndex = 0;
 
         while (currentRowIndex < IA[i] - IA[i - 1]) {
-            int32_t rowVal = i - 1;
-            int32_t colVal = JA[IA[i - 1] + currentRowIndex];
+            int32_t rowVal = i - 1 + src;
+            int32_t colVal = JA[IA[i - 1] + currentRowIndex] + src;
             int32_t realVal = value[IA[i - 1] + currentRowIndex];
 
             vector <int32_t> pairing{rowVal, colVal, realVal};
