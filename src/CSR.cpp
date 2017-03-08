@@ -6,7 +6,7 @@
  * @param int32_t edges: Number of edges
  * @return CSR : an empty compressed sparse row object
  */
-CSR::CSR(int32_t size, int32_t numEdges) : size(size + 1), numEdges(numEdges), currSrc(1), NNZ(0), outDegreeNode(0), largestOutDegree(0), currOutDegree(0) {
+CSR::CSR(int32_t size, int32_t numEdges) : size(size + 1), numEdges(numEdges), currSrc(1), NNZ(0) {
     size += 1;
     value = vector<int32_t>();
     IA = vector<int32_t>({0, 0});
@@ -42,6 +42,7 @@ void CSR::update(int32_t x, int end){
         ++currSrc;
         ++x;
     }
+}
 
 /* @param int32_t x: x value in the adjaceny matrix, the from node label
  * @param int32_t y: y value in the adjaceny matrix, the to node label
@@ -64,7 +65,6 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
         ++NNZ;
         tempJA.push_back(y);
         seenNodes[y] = val;
-        ++currOutDegree;
     } else {
         if(seenNodes[y] < val) seenNodes[y] = val;
     }
