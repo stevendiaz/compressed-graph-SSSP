@@ -7,10 +7,11 @@
 
 /* @param CSR graph: inner copy of the CSR
  * @param int32_t delta: value of delta to be run on the algorithm
+ * @param int32_t seed: seed used for RNG
  * constructor:
  *	initializes buckets and sets initial light and heavy sets
  */
-Worklist::Worklist(CSR graph, int32_t delta) : csr(graph), delta(delta), relaxEdgeCount(0), relaxNodeCount(0) {
+Worklist::Worklist(CSR graph, int32_t delta, int32_t seed) : csr(graph), delta(delta), relaxEdgeCount(0), relaxNodeCount(0), randomSeed(seed) {
     buckets = map<long, set<int32_t>>();
     vector<vector<int32_t>> vals = graph.iterate();
     int32_t w = 0;
@@ -94,9 +95,12 @@ void Worklist::relax(int32_t w, long d) {
  *  public method:
  *	shuffles the nodes and calls relax on each node and cost
  */
+int myrandom (int i) { return rand()%i;}
+
 void Worklist::relaxNodes(set<csrTuple> req, int seed) {
+    srand (randomSeed);
     vector<csrTuple> reqVector(req.begin(), req.end());
-    shuffle(reqVector.begin(), reqVector.end(), default_random_engine(seed));
+    random_shuffle(reqVector.begin(), reqVector.end(), myrandom);
 
     for (auto it = reqVector.begin(); it != reqVector.end(); ++it) {
         relax(it->first, it->second);

@@ -13,7 +13,7 @@
 #SBATCH -p serial           	            # Queue name
 #SBATCH -N 1                                # Total number of nodes requested (16 cores/node)
 #SBATCH -n 1                                # Total number of tasks
-#SBATCH -t 01:00:00                         # Run time
+#SBATCH -t 02:00:00                         # Run time
 
 # Load any necessary module
 module load gcc/4.9.3
@@ -28,7 +28,7 @@ make degree
 ./degree.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat22.dimacs
 ./degree.o < /work/01131/rashid/class-inputs/rmat_graphs/rmat23.dimacs
 ./degree.o < /work/01131/rashid/class-inputs/road/road-NY.dimacs
-./degree.o < /work/01131/rashid/class-inputs/road/road-FL.dimacs
+./degree.o < /work/01131/rashid/class-inputs/road/road-FLA.dimacs
 
 
 #Clean

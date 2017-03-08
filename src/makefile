@@ -28,3 +28,7 @@ deltaOptimal: deltaOptimalExperiment.cpp CSR.cpp Worklist.cpp SSSP.cpp Parser.cp
 
 degree: getLargestOutDegree.cpp CSR.cpp Parser.cpp
 	$(CXX) $(CXXFLAGS) getLargestOutDegree.cpp CSR.cpp Parser.cpp -o degree.o
+
+#Put test make
+put: putTest.cpp CSR.cpp Worklist.cpp SSSP.cpp Parser.cpp
+	$(CXX) $(CXXFLAGS) putTest.cpp CSR.cpp Worklist.cpp SSSP.cpp Parser.cpp -o put

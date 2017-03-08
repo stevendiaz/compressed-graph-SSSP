@@ -74,15 +74,17 @@ From the previous experiment, the optimal value for delta is ```VALUE```
 | Graph    | Number of nodes | Relaxations |
 |----------|-----------------|-------------|
 | rmat15   | 32768           | 179176      |
-| rmat20   | 0               |             |
+| rmat20   | 1048576         | 6849023     |
 | rmat22   | 0               |             |
+| rmat23   | 0               |             |
 | road-FLA | 0               |             |
 | road-NY  | 0               |             |
 
 | Graph    | Number of nodes | Running time (seconds) |
 |----------|-----------------|--------------|
-| rmat15   | 0               |              |
-| rmat20   | 0               |              |
-| rmat22   | 0               |              |
+| rmat15   | 32768           |   24.89      |
+| rmat20   | 1048576         |   1635.57    |
+| rmat22   | 419430          |   13084.56   |
+| rmat23   |                 |              |
 | road-FLA | 0               |              |
 | road-NY  | 0               |              |

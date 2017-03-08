@@ -23,10 +23,11 @@ private:
     map<long, set<int32_t>> buckets;
     set<vector<int32_t>> heavy;
     set<vector<int32_t>> light;
+    int32_t randomSeed;
 
 public:
     CSR csr;
-    Worklist(CSR graph, int32_t delta);
+    Worklist(CSR graph, int32_t delta, int32_t seed);
     bool hasElements();
     long getIndex();
     set<int32_t> get(long i);

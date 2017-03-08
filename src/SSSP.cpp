@@ -15,6 +15,7 @@ DeltaStep::DeltaStep(CSR csr, int32_t step, int seed) : csr(csr), delta(step), s
  */
 void DeltaStep::run(bool printLabels, bool printRelaxCount) {
     vector <vector<int32_t>> graph = csr.iterate();
+
     set<vector<int32_t>> tempLight;
     set<vector<int32_t>> tempHeavy;
 
@@ -28,7 +29,7 @@ void DeltaStep::run(bool printLabels, bool printRelaxCount) {
         }
     }
 
-    Worklist worklist = Worklist(csr, delta);
+    Worklist worklist = Worklist(csr, delta, seed);
     worklist.setLight(tempLight);
     worklist.setHeavy(tempHeavy);
     worklist.relax(1, 0);
