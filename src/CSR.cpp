@@ -1,6 +1,11 @@
 #include "CSR.h"
 
 /* CSRImpl Class Methods */
+
+/* @param int32_t size: Number of nodes, represents a size*size matrix
+ * @param int32_t edges: Number of edges
+ * @return CSR : an empty compressed sparse row object
+ */
 CSR::CSR(int32_t size, int32_t numEdges) : size(size + 1), numEdges(numEdges), currSrc(1), NNZ(0), outDegreeNode(0), largestOutDegree(0), currOutDegree(0) {
     size += 1;
     value = vector<int32_t>();
@@ -13,6 +18,12 @@ CSR::CSR(int32_t size, int32_t numEdges) : size(size + 1), numEdges(numEdges), c
     tempJA = vector<int32_t>();
 }
 
+/* @param int32_t x: x value in the adjaceny matrix, the from node label
+ * @param int end: next node with at least one out degree
+ * private method: 
+ *      If the value has been set before, make proper adjustments to 
+ *      internal datastructures. 
+ */
 void CSR::update(int32_t x, int end){
     //Update JA
     sort(tempJA.begin(), tempJA.end());
@@ -32,14 +43,12 @@ void CSR::update(int32_t x, int end){
         ++x;
     }
 
-    //Update largest out-degree and node with largest out-degree
-    if (currOutDegree > largestOutDegree) {
-        largestOutDegree = currOutDegree;
-        currOutDegree = 0;
-        outDegreeNode = currSrc;
-    }
-}
-
+/* @param int32_t x: x value in the adjaceny matrix, the from node label
+ * @param int32_t y: y value in the adjaceny matrix, the to node label
+ * @param int32_t val: the weight in the adjaceny matrix
+ * public method: 
+ *      sets the weight of edge x to y to val
+ */
 void CSR::put(int32_t x, int32_t y, int32_t val) {
     if(relaxMap.find(x) == relaxMap.end()) relaxMap[x] = set<int32_t>({y});
     else relaxMap[x].insert(y);
@@ -61,6 +70,11 @@ void CSR::put(int32_t x, int32_t y, int32_t val) {
     }
 }
 
+/* 
+ * public method: 
+ *      returns a set of all the edges in the graph
+ *      each vector will be of the from <to, from, weight>
+ */
 vector <vector<int32_t>> CSR::iterate() {
     vector <vector<int32_t>> result;
 
@@ -80,6 +94,10 @@ vector <vector<int32_t>> CSR::iterate() {
     return result;
 }
 
+/* 
+ * public method: 
+ *      Prints the tentative cost of all the nodes
+ */
 void CSR::printNodeLabels() {
     cout << "0 INF" << endl;
     for (size_t i = 1; i < nodeLabels.size(); ++i){
@@ -90,27 +108,29 @@ void CSR::printNodeLabels() {
 
 }
 
-int32_t CSR::getOutDegreeNode() {
-    int32_t row = -1;
-    int32_t oldDegree = 0;
-    for(int i = 0; i < size; ++i) {
-        int32_t currDegree = IA[i + 1] - IA[i];
-        if(currDegree > oldDegree) {
-            row = i;
-            oldDegree = currDegree;
-        }
-    }
-    return row;
-}
 
+ /* @param int32_t u: node id
+ * public method: 
+ *      gets the tentative cost of node u
+ * @return long: tentative cost of node u
+ */
 long CSR::getTent(int32_t u) {
     return nodeLabels[u];
 }
 
+/* @param int32_t u: node id
+ * @param int32_t v: tentative cost to be set
+ * public method: 
+ *      sets the weight of edge x to y to val
+ */
 void CSR::setTent(int32_t u, long val) {
     nodeLabels[u] = val;
 }
 
+/* 
+ * public method: 
+ *      prints all inner datastructures of CSR
+ */
 void CSR::debugInfo() {
     cout << "value: " << value.size() << endl;
     for(auto it = value.begin(); it != value.end(); ++it)
@@ -128,10 +148,40 @@ void CSR::debugInfo() {
     cout << endl;
 }
 
+
+/* 
+ * public method: 
+ *      gets the node with the largest outdegree
+ * @return int32_t: node with the largest out degree
+ */
+int32_t CSR::getLargestOutDegree() {
+   int32_t oldDegree = -1;
+   int32_t row = -1;
+
+   for (int i = 0; i < size; ++i) {
+       int32_t currDegree = IA[i + 1] - IA[i];
+       if (currDegree > oldDegree) {
+           row = i;
+           oldDegree = currDegree;
+       }
+   }
+   return row;
+}
+
+/* @param int32_t node: node id
+ * public method: 
+ *      checks if node has had all it's edges relaxed
+ * @return bool: true if all edges have been relax, false otherwise
+ */
 bool CSR::nodeFullyRelaxed(int32_t node){
     return relaxMap[node].size() == 0;
 }
 
+/* @param int32_t src: to edge
+ * @param int32_t dest: from edge
+ * public method: 
+ *      sets edge src->dest as relaxed
+ */
 void CSR::relaxNode(int32_t src, int32_t dest){
     if(relaxMap[src].find(dest) != relaxMap[src].end())
         relaxMap[src].erase(dest);
