@@ -91,7 +91,16 @@ void CSR::printNodeLabels() {
 }
 
 int32_t CSR::getOutDegreeNode() {
-    return outDegreeNode;
+    int32_t row = -1;
+    int32_t oldDegree = 0;
+    for(int i = 0; i < size; ++i) {
+        int32_t currDegree = IA[i + 1] - IA[i];
+        if(currDegree > oldDegree) {
+            row = i;
+            oldDegree = currDegree;
+        }
+    }
+    return row;
 }
 
 long CSR::getTent(int32_t u) {
