@@ -17,6 +17,7 @@ using namespace std;
 class CSR {
 private:
     int32_t size;
+    int32_t numEdges;
     vector<int32_t> value;
     vector<int32_t> IA;
     vector<int32_t> JA;
@@ -31,7 +32,7 @@ private:
     map<int32_t, set<int32_t>> relaxMap;
 
 public:
-    CSR (int32_t size);
+    CSR (int32_t size, int32_t edge);
 
     int32_t get(int32_t x, int32_t y);
     void put(int32_t x, int32_t y, int32_t val);
@@ -44,6 +45,7 @@ public:
     bool nodeFullyRelaxed(int32_t node);
     void relaxNode(int32_t src, int32_t dest);
     void update(int32_t x, int32_t end);
+    void to_dimacs();
 };
 
 #endif

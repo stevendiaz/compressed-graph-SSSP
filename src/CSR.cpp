@@ -1,7 +1,7 @@
 #include "CSR.h"
 
 /* CSRImpl Class Methods */
-CSR::CSR(int32_t size) : size(size + 1), currSrc(1), NNZ(0), outDegreeNode(0), largestOutDegree(0), currOutDegree(0) {
+CSR::CSR(int32_t size, int32_t numEdges) : size(size + 1), numEdges(numEdges), currSrc(1), NNZ(0), outDegreeNode(0), largestOutDegree(0), currOutDegree(0) {
     size += 1;
     value = vector<int32_t>();
     IA = vector<int32_t>({0, 0});
@@ -91,7 +91,16 @@ void CSR::printNodeLabels() {
 }
 
 int32_t CSR::getOutDegreeNode() {
-    return outDegreeNode;
+    int32_t row = -1;
+    int32_t oldDegree = 0;
+    for(int i = 0; i < size; ++i) {
+        int32_t currDegree = IA[i + 1] - IA[i];
+        if(currDegree > oldDegree) {
+            row = i;
+            oldDegree = currDegree;
+        }
+    }
+    return row;
 }
 
 long CSR::getTent(int32_t u) {
@@ -126,4 +135,16 @@ bool CSR::nodeFullyRelaxed(int32_t node){
 void CSR::relaxNode(int32_t src, int32_t dest){
     if(relaxMap[src].find(dest) != relaxMap[src].end())
         relaxMap[src].erase(dest);
+}
+
+void CSR::to_dimacs() {
+    cout << "p sp " << size - 1 << " " <<  numEdges << endl;
+
+    vector<vector<int32_t> > edges = iterate();
+    for(auto it = edges.begin(); it != edges.end(); ++it) {
+        int32_t u = it->at(0);
+        int32_t v = it->at(1);
+        int32_t w = it->at(2);
+        cout << "a " << u << " " << v << " " << w << endl;
+    }
 }
