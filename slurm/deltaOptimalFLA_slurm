@@ -20,10 +20,10 @@ module load gcc/4.9.3
 
 #Compile
 cd ../src
-make deltaOptimal
+make deltaFLA
 
 #Execute
-./deltaOptimal.o < /work/01131/rashid/class-inputs/road/road-FLA.dimacs
+./deltaFLA.o < /work/01131/rashid/class-inputs/road/road-FLA.dimacs
 
 #Clean
 make clean

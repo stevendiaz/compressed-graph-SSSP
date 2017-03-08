@@ -20,10 +20,10 @@ module load gcc/4.9.3
 
 #Compile
 cd ../src
-make delta
+make deltaNY
 
 #Execute
-./delta.o < /work/01131/rashid/class-inputs/road/road-NY.dimacs
+./deltaNY.o < /work/01131/rashid/class-inputs/road/road-NY.dimacs
 
 #Clean
 make clean

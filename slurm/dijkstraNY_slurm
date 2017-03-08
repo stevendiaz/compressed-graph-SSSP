@@ -20,10 +20,10 @@ module load gcc/4.9.3
 
 #Compile
 cd ../src
-make dijkstra
+make dijkstraNY
 
 #Execute
-./dijkstra.o < /work/01131/rashid/class-inputs/road/road-NY.dimacs
+./dijkstraNY.o < /work/01131/rashid/class-inputs/road/road-NY.dimacs
 
 #Clean
 make clean
