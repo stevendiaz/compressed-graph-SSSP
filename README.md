@@ -125,3 +125,32 @@ Documentation
 #### deltaOptimalExperiment.cpp
 - runs the optimal delta across all the different graphs
 - prints node relaxations and clock time
+
+Finding Highest Outdegree
+=========================
+#### General Approach
+The graph is represented by a ```NxN``` matrix, where the rows represent ```from``` vertices and the columns represent the ```to``` vertices. 
+Therefore, if `A[u][v] = w`, there is edge from `u` to `v` with edge weight `w`. 
+
+With this definition, calculating the highest outdegree is equivalent to finding the row with the most non-zero entries. 
+
+#### Finding most non-zero entries with Compressed Sparse Row
+
+The number of non-zero entries can be computed with the `IA` vector of Compressed Sparse Row.
+
+The `IA` vector has the following definition:
+- IA[0] = 0
+- IA[_i_] = IA[_i_ - 1] + number of non-zero entries for row _i_ - 1
+
+#### Code
+
+```
+for(int i = 0; i < numRows){
+    int currDegree = IA[i + 1] - IA[i];
+    if(currDegree > oldDegree){
+        row = i;
+        oldDegree = currDegree;
+    }
+}
+return row;
+```
